@@ -1,0 +1,2874 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>ArtStamps — 現代美術作品の制作時期証明システム | ブロックチェーンで制作日時を証明</title>
+<meta name="description" content="ArtStampsは、現代美術作品の制作時期をビットコインのブロックチェーンに刻み込む無料の制作時期証明システムです。作品の写真をアップロードするだけで、SHA-256ハッシュをOpenTimestampsに送信し、改ざん不可能なタイムスタンプを取得できます。">
+<meta name="keywords" content="現代美術,存在証明,ブロックチェーン,タイムスタンプ,OpenTimestamps,Bitcoin,アート,著作権,制作日時証明">
+<meta name="author" content="ArtStamps">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://artstamps.netlify.app/">
+
+<!-- OGP -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="ArtStamps — 現代美術作品の制作時期証明システム">
+<meta property="og:description" content="作品写真をアップロードするだけ。ビットコインのブロックチェーンに制作日時の証拠を永続的に刻み込む、現代美術家のための無料ツールです。">
+<meta property="og:url" content="https://artstamps.netlify.app/">
+<meta property="og:site_name" content="ArtStamps">
+<meta property="og:locale" content="ja_JP">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ArtStamps — 現代美術作品の制作時期証明システム">
+<meta name="twitter:description" content="作品写真をアップロードするだけ。ビットコインのブロックチェーンに制作日時を永続的に刻み込む無料ツール。">
+
+<!-- Structured Data: WebApplication -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "ArtStamps",
+  "description": "現代美術作品の制作時期をビットコインのブロックチェーンに刻み込む無料の制作時期証明システム。OpenTimestampsを使用。",
+  "url": "https://artstamps.netlify.app/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "JPY"
+  },
+  "featureList": [
+    "SHA-256ハッシュによる作品指紋生成",
+    "OpenTimestampsによるBitcoinブロックチェーン刻印",
+    "OTSファイルのダウンロード・保管",
+    "第三者による独立した制作時期の検証"
+  ]
+}
+</script>
+
+<!-- PWA -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2d6a4f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ArtStamps">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj4KICA8cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQyIiBmaWxsPSIjMGYwZTBjIi8+CiAgPGNpcmNsZSBjeD0iOTYiIGN5PSI5NiIgcj0iNzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJkNmE0ZiIgc3Ryb2tlLXdpZHRoPSI5Ii8+CiAgPGxpbmUgeDE9Ijk2IiB5MT0iMjYiIHgyPSI5NiIgeTI9IjQyIiBzdHJva2U9IiMyZDZhNGYiIHN0cm9rZS13aWR0aD0iOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjE2NiIgeTE9Ijk2IiB4Mj0iMTUwIiB5Mj0iOTYiIHN0cm9rZT0iIzJkNmE0ZiIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8bGluZSB4MT0iOTYiIHkxPSIxNjYiIHgyPSI5NiIgeTI9IjE1MCIgc3Ryb2tlPSIjMmQ2YTRmIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxsaW5lIHgxPSIyNiIgeTE9Ijk2IiB4Mj0iNDIiIHkyPSI5NiIgc3Ryb2tlPSIjMmQ2YTRmIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik0xMTQgNjIgQzExNCA0OSA3MyA0OSA3MyA3MiBDNzMgOTUgMTIwIDk1IDEyMCAxMTggQzEyMCAxNDEgODAgMTQxIDgwIDEzMCIgc3Ryb2tlPSIjNTJiNzg4IiBzdHJva2Utd2lkdGg9IjExIiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiLz4KICA8Y2lyY2xlIGN4PSI5NiIgY3k9Ijk2IiByPSI4IiBmaWxsPSIjNTJiNzg4Ii8+Cjwvc3ZnPg==">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='8' fill='%230f0e0c'/><circle cx='18' cy='18' r='14' fill='none' stroke='%232d6a4f' stroke-width='1.8'/><line x1='18' y1='5' x2='18' y2='8' stroke='%232d6a4f' stroke-width='1.5' stroke-linecap='round'/><line x1='31' y1='18' x2='28' y2='18' stroke='%232d6a4f' stroke-width='1.5' stroke-linecap='round'/><line x1='18' y1='31' x2='18' y2='28' stroke='%232d6a4f' stroke-width='1.5' stroke-linecap='round'/><line x1='5' y1='18' x2='8' y2='18' stroke='%232d6a4f' stroke-width='1.5' stroke-linecap='round'/><path d='M21 12 C21 9.5 13.5 9.5 13.5 14 C13.5 18.5 22.5 18.5 22.5 23 C22.5 27.5 15 27.5 15 25' stroke='%2352b788' stroke-width='2' stroke-linecap='round' fill='none'/><circle cx='18' cy='18' r='1.5' fill='%2352b788'/></svg>">
+
+<!-- Monetag サイト認証 -->
+<meta name="monetag" content="f808712f8c2bea53d150e40129c40bc4">
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4492038278621252" crossorigin="anonymous"></script>
+<!-- Monetag (CPM型 — 表示課金・インタースティシャル/プッシュ通知) -->
+<!-- ★ 要設定: monetag.com でサイト登録後、下記IDを実際のPublisher IDに変更してください -->
+<!-- <script src="//whephiwums.com/PUBLISHER_ID/invoke.js" async></script> -->
+<!-- OpenTimestamps: Netlifyプロキシ経由でCORS回避（netlify/functions/ots-stamp.js） -->
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f0f7f4;
+    --warm: #d8ede6;
+    --accent: #2d6a4f;
+    --accent2: #52b788;
+    --muted: #7a9088;
+    --success: #2d6a4f;
+    --pending: #b5830a;
+    --border: #b8d8ce;
+    --card-bg: #f7fbf9;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  header {
+    padding: 20px 24px 16px;
+    padding-top: max(20px, env(safe-area-inset-top));
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Shippori Mincho', serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+    color: var(--ink);
+  }
+
+  .logo span {
+    color: var(--accent);
+  }
+
+  .logo-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  nav {
+    display: flex;
+    gap: 4px;
+    background: var(--warm);
+    border-radius: 8px;
+    padding: 3px;
+  }
+
+  nav button {
+    padding: 6px 14px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  nav button.active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ===== UPLOAD SCREEN ===== */
+  .upload-screen {
+    padding: 24px;
+  }
+
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 16px;
+    padding: 48px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: var(--card-bg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--accent);
+    background: #e4f2ec;
+  }
+
+  .upload-zone input[type=file] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .upload-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .upload-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .upload-sub {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  .preview-section {
+    margin-top: 20px;
+    display: none;
+  }
+
+  .preview-section.visible { display: block; }
+
+  .preview-img {
+    width: 100%;
+    max-height: 280px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .form-group {
+    margin-top: 16px;
+  }
+
+  .form-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .form-input, .form-textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card-bg);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus, .form-textarea:focus {
+    border-color: var(--accent2);
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .hash-display {
+    margin-top: 16px;
+    background: var(--ink);
+    color: #a8d8a8;
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 11px;
+    word-break: break-all;
+    line-height: 1.7;
+    display: none;
+  }
+
+  .hash-display.visible { display: block; }
+
+  .hash-label {
+    color: var(--muted);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 16px;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .btn-primary:hover {
+    background: var(--accent2);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-accent {
+    background: var(--accent);
+    color: white;
+  }
+
+  .btn-accent:hover {
+    background: #1e5038;
+  }
+
+  /* ===== ARTWORK LIST ===== */
+  .list-screen {
+    padding: 20px 24px;
+  }
+
+  .list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .list-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .count-badge {
+    background: var(--warm);
+    color: var(--muted);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+  }
+
+  .artwork-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .artwork-card:hover {
+    border-color: var(--accent2);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    transform: translateY(-1px);
+  }
+
+  .card-thumb {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 10px;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+  }
+
+  .card-thumb-placeholder {
+    width: 72px;
+    height: 72px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    background: var(--warm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    border: 1px solid var(--border);
+  }
+
+  .card-info { flex: 1; min-width: 0; }
+
+  .card-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-date {
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
+
+  .status-pending {
+    background: #fff8e6;
+    color: var(--pending);
+    border: 1px solid #f0d080;
+  }
+
+  .status-confirmed {
+    background: #e8f5ee;
+    color: var(--success);
+    border: 1px solid #90d4a8;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .status-pending .status-dot {
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--muted);
+  }
+
+  .empty-icon { font-size: 48px; margin-bottom: 16px; }
+
+  .empty-text {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+
+  .empty-sub { font-size: 12px; }
+
+  /* ===== DETAIL SCREEN ===== */
+  .detail-screen {
+    padding: 20px 24px;
+  }
+
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  .detail-img {
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+
+  .detail-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+
+  .detail-date {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+
+  .info-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+
+  .info-section-title {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    gap: 12px;
+  }
+
+  .info-row:last-child { margin-bottom: 0; }
+
+  .info-key {
+    font-size: 11px;
+    color: var(--muted);
+    flex-shrink: 0;
+    letter-spacing: 0.3px;
+  }
+
+  .info-value {
+    font-size: 11px;
+    text-align: right;
+    word-break: break-all;
+    line-height: 1.5;
+  }
+
+  .hash-value {
+    font-size: 9px;
+    color: var(--accent2);
+    text-align: right;
+    word-break: break-all;
+    line-height: 1.6;
+    cursor: pointer;
+  }
+
+  .hash-value:hover { color: var(--accent); }
+
+  .copy-hint {
+    font-size: 9px;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 4px;
+  }
+
+  .download-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    background: var(--accent2);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  .download-btn:hover {
+    background: #1e5038;
+    transform: translateY(-1px);
+  }
+
+  /* ===== SEARCH SCREEN ===== */
+  .search-screen {
+    padding: 20px 24px;
+  }
+
+  .search-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+
+  .search-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .search-result {
+    margin-top: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    display: none;
+  }
+
+  .search-result.visible { display: block; }
+
+  .result-match {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .result-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .result-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .result-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .no-result {
+    margin-top: 20px;
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    display: none;
+  }
+
+  .no-result.visible { display: block; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 20px;
+    border-radius: 100px;
+    font-size: 12px;
+    z-index: 9999;
+    transition: transform 0.3s ease;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Loading spinner */
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--warm);
+    border-radius: 2px;
+    margin-top: 12px;
+    overflow: hidden;
+    display: none;
+  }
+
+  .progress-bar.visible { display: block; }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 20px 0;
+  }
+
+  .ad-unit {
+    margin: 24px 0 8px;
+    text-align: center;
+    min-height: 100px;
+  }
+
+  /* ===== SORT / FILTER BAR ===== */
+  .list-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-btn {
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: transparent;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .filter-btn.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  .sort-select {
+    margin-left: auto;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--card-bg);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 24px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a9088' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+  }
+
+  /* ===== OTS RETRY BUTTON ===== */
+  .retry-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #fff8e6;
+    border: 1px solid #f0d080;
+    border-radius: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--pending);
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+
+  .retry-btn:hover { background: #fff0c0; border-color: #e0b040; }
+  .retry-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ===== PDF CERTIFICATE BUTTON ===== */
+  .cert-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  .cert-btn:hover { background: var(--accent); transform: translateY(-1px); }
+
+  .ad-label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* ===== HELP SCREEN ===== */
+  .help-screen { padding: 20px 24px 40px; }
+
+  .help-hero {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 18px;
+    padding: 28px 24px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .help-hero::before {
+    content: '';
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 48px;
+    opacity: 0.15;
+  }
+
+  .help-hero-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .help-hero-body {
+    font-size: 11px;
+    line-height: 1.8;
+    color: #c8c0b0;
+    letter-spacing: 0.3px;
+  }
+
+  .help-section {
+    margin-bottom: 28px;
+  }
+
+  .help-section-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 17px;
+    font-weight: 800;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .step-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .step-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+  }
+
+  .step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .step-content { flex: 1; }
+
+  .step-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .step-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .faq-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .faq-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .faq-q {
+    padding: 14px 16px;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    user-select: none;
+  }
+
+  .faq-q::after {
+    content: '＋';
+    font-size: 16px;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: transform 0.2s;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .faq-item.open .faq-q::after { content: '－'; }
+
+  .faq-a {
+    display: none;
+    padding: 0 16px 14px;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.8;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+  }
+
+  .faq-item.open .faq-a { display: block; }
+
+  .verify-box {
+    background: #f0f4ff;
+    border: 1px solid #c0d0f0;
+    border-radius: 14px;
+    padding: 18px;
+  }
+
+  .verify-step {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+
+  .verify-step:last-child { margin-bottom: 0; }
+
+  .verify-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+  }
+
+  .chain-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+  }
+
+  .chain-node {
+    background: var(--warm);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+
+  .chain-arrow {
+    color: var(--accent);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* ===== TUTORIAL OVERLAY ===== */
+  .tutorial-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,14,12,0.85);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 20px;
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+
+  .tutorial-card {
+    background: var(--paper);
+    border-radius: 24px;
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+  }
+
+  .tutorial-step-indicator {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+
+  .tutorial-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: all 0.3s;
+  }
+
+  .tutorial-dot.active {
+    width: 20px;
+    border-radius: 3px;
+    background: var(--accent);
+  }
+
+  .tutorial-icon {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .tutorial-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 20px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .tutorial-body {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+
+  .tutorial-btns {
+    display: flex;
+    gap: 10px;
+  }
+
+  .tutorial-skip {
+    flex: 1;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: transparent;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .tutorial-next {
+    flex: 2;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: var(--ink);
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--paper);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .tutorial-next:hover { background: var(--accent); }
+
+  .ots-note {
+    background: #f0f4ff;
+    border: 1px solid #c0d0f0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 10px;
+    color: var(--accent2);
+    line-height: 1.7;
+    margin-top: 12px;
+    letter-spacing: 0.3px;
+  }
+</style>
+</head>
+<body>
+
+<!-- AdSense審査・SEO用: クローラー向け静的コンテンツ（JS無効時も表示） -->
+<noscript>
+<div style="max-width:680px;margin:40px auto;padding:24px;font-family:sans-serif;color:#1a1a1a;line-height:1.7;">
+  <h1 style="font-size:24px;margin-bottom:8px;">ArtStamps — 現代美術作品の制作時期証明システム</h1>
+  <p style="color:#555;margin-bottom:24px;">作品写真をアップロードするだけで、ビットコインのブロックチェーンに制作日時を永続的に刻み込む無料ツールです。</p>
+  <h2 style="font-size:16px;border-bottom:1px solid #ddd;padding-bottom:6px;">ArtStampsとは</h2>
+  <p>物理的な作品が「いつ存在していたか」を、第三者が改ざん不可能な形で証明するシステムです。OpenTimestampsという技術を使って作品のSHA-256ハッシュ（デジタル指紋）をBitcoinブロックチェーンに刻み込み、制作日時の永続的な証拠を残します。</p>
+  <h2 style="font-size:16px;border-bottom:1px solid #ddd;padding-bottom:6px;margin-top:20px;">使い方</h2>
+  <ol style="padding-left:20px;">
+    <li>完成した作品をスマートフォンで撮影する</li>
+    <li>「登録」タブで写真をアップロードする</li>
+    <li>「タイムスタンプを取得する」をタップする</li>
+    <li>数時間〜数日でビットコインブロックへの組み込みが完了し「確認済み」になる</li>
+    <li>OTSファイルをダウンロードして保管する</li>
+  </ol>
+  <h2 style="font-size:16px;border-bottom:1px solid #ddd;padding-bottom:6px;margin-top:20px;">よくある質問</h2>
+  <p><strong>Q: 写真そのものがブロックチェーンに保存されますか？</strong><br>いいえ。SHA-256という数学的な「指紋」だけが記録されます。写真ファイルはデバイスのローカルに保存されるだけです。</p>
+  <p><strong>Q: 無料で使えますか？</strong><br>はい。ArtStampsは現代美術のコミュニティへの貢献として永続的に無料で提供します。OpenTimestamps自体もオープンソースの無料サービスです。</p>
+  <p><strong>Q: 著作権の登録になりますか？</strong><br>著作権の登録ではありません。「この作品がこの日時以前に存在していた」という事実の証明です。著作権の証拠を強化するツールとして有効です。</p>
+  <p><strong>Q: データはどこに保存されますか？</strong><br>すべてのデータはお使いのデバイスのローカルストレージに保存されます。サーバーには一切送信されません。</p>
+  <p style="margin-top:24px;font-size:12px;color:#888;">このサービスをご利用になるにはJavaScriptを有効にしてください。</p>
+</div>
+</noscript>
+
+<header>
+  <div style="display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="showScreen('upload')" title="トップへ">
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="16" fill="none" stroke="#2d6a4f" stroke-width="2"/>
+      <line x1="18" y1="4" x2="18" y2="7" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="32" y1="18" x2="29" y2="18" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="18" y1="32" x2="18" y2="29" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="4" y1="18" x2="7" y2="18" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M22 11 C22 8 13 8 13 13 C13 18 23 18 23 23 C23 28 14 28 14 25" stroke="#2d6a4f" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+      <circle cx="18" cy="18" r="1.5" fill="#52b788"/>
+    </svg>
+    <div>
+      <div class="logo">Art<span>Stamps</span></div>
+      <div class="logo-sub" data-i18n="subtitle">制作時期証明システム</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <button id="langToggle" onclick="toggleLang()" style="font-family:'DM Mono',monospace;font-size:10px;padding:4px 10px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--muted);cursor:pointer;letter-spacing:1px;">EN</button>
+  <nav>
+    <button class="active" onclick="showScreen('upload')" data-i18n="nav_register">登録</button>
+    <button onclick="showScreen('list')" data-i18n="nav_list">一覧</button>
+    <button onclick="showScreen('search')" data-i18n="nav_search">検索</button>
+    <button onclick="showScreen('help')" data-i18n="nav_help">使い方</button>
+  </nav>
+  </div>
+</header>
+
+<!-- UPLOAD SCREEN -->
+<div id="screen-upload" class="screen upload-screen active">
+  <div class="upload-zone" id="uploadZone">
+    <input type="file" id="fileInput" accept="image/jpeg,image/png,image/gif,image/webp,image/tiff" onchange="handleFile(event)">
+    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:10px;">
+      <!-- Canvas -->
+      <rect x="8" y="10" width="48" height="38" rx="2" fill="#d8ede6" stroke="#6a8878" stroke-width="1.5"/>
+      <!-- Abstract art on canvas -->
+      <rect x="12" y="14" width="20" height="16" rx="1" fill="#2d6a4f" opacity="0.7"/>
+      <circle cx="42" cy="22" r="9" fill="#1a4a3a" opacity="0.65"/>
+      <polygon points="12,44 26,28 38,40" fill="#2d6a4f" opacity="0.7"/>
+      <rect x="34" y="32" width="18" height="14" rx="1" fill="#52b788" opacity="0.7"/>
+      <!-- Frame border -->
+      <rect x="8" y="10" width="48" height="38" rx="2" fill="none" stroke="#6a8878" stroke-width="1.5"/>
+      <!-- Easel legs -->
+      <line x1="20" y1="48" x2="14" y2="58" stroke="#6a8878" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="44" y1="48" x2="50" y2="58" stroke="#6a8878" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="32" y1="48" x2="32" y2="58" stroke="#6a8878" stroke-width="1.5" stroke-linecap="round"/>
+      <!-- Upload arrow -->
+      <circle cx="50" cy="14" r="10" fill="#1a3028"/>
+      <line x1="50" y1="18" x2="50" y2="10" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+      <polyline points="46,13 50,9 54,13" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="upload-title" data-i18n="upload_title">作品写真を選択</div>
+    <div class="upload-sub" data-i18n="upload_sub">タップして写真を選ぶ・またはドロップ</div>
+  </div>
+
+  <div class="preview-section" id="previewSection">
+    <img id="previewImg" class="preview-img" src="" alt="preview">
+
+    <div class="form-group">
+      <label class="form-label" data-i18n="label_title">作品タイトル *</label>
+      <input class="form-input" id="titleInput" type="text" data-i18n-placeholder="ph_title" placeholder="例: 無題 #12">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" data-i18n="label_year">制作年</label>
+        <input class="form-input" id="yearInput" type="text" placeholder="2024">
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-i18n="label_size">サイズ</label>
+        <input class="form-input" id="sizeInput" type="text" placeholder="600×800mm">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" data-i18n="label_material">素材・技法</label>
+      <input class="form-input" id="materialInput" type="text" data-i18n-placeholder="ph_material" placeholder="例: 油彩、キャンバス">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" data-i18n="label_memo">メモ</label>
+      <textarea class="form-textarea" id="memoInput" data-i18n-placeholder="ph_memo" placeholder="制作背景、展示履歴など..."></textarea>
+    </div>
+
+    <div class="hash-display" id="hashDisplay">
+      <span class="hash-label" data-i18n="hash_label">SHA-256 ハッシュ値</span>
+      <span id="hashValue"></span>
+    </div>
+
+    <div class="progress-bar" id="progressBar">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+
+    <button class="btn btn-primary" id="submitBtn" onclick="submitArtwork()" disabled data-i18n="btn_submit">
+      タイムスタンプを取得する
+    </button>
+
+    <!-- admax 登録画面 -->
+    <div class="ad-unit" style="margin-top:20px;">
+      <span class="ad-label">スポンサー</span>
+      <!-- admax -->
+    <script src="https://adm.shinobi.jp/s/9728b4be9fb26812752bf28927420563"></script>
+    <!-- admax -->
+    </div>
+    <div class="ots-note" data-i18n="ots_note">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px;"><circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><line x1="7" y1="8" x2="7" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4" y1="13" x2="10" y2="13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> SHA-256ハッシュを生成後、OpenTimestamps APIへ送信します。
+      ビットコインブロックチェーンへの組み込みには通常数時間〜数日かかります。
+      OTSファイルは作品一覧からダウンロード可能です。
+    </div>
+  </div>
+</div>
+
+<!-- LIST SCREEN -->
+<div id="screen-list" class="screen list-screen">
+  <div class="list-header">
+    <div class="list-title" data-i18n="list_title">作品一覧</div>
+    <span class="count-badge" id="countBadge">0点</span>
+  </div>
+  <div class="list-controls">
+    <button class="filter-btn active" data-filter="all" onclick="setFilter('all')" data-i18n="filter_all">すべて</button>
+    <button class="filter-btn" data-filter="pending" onclick="setFilter('pending')" data-i18n="filter_pending">待機中</button>
+    <button class="filter-btn" data-filter="confirmed" onclick="setFilter('confirmed')" data-i18n="filter_confirmed">確認済み</button>
+    <select class="sort-select" id="sortSelect" onchange="renderList()">
+      <option value="date_desc" data-i18n="sort_date_desc">新しい順</option>
+      <option value="date_asc" data-i18n="sort_date_asc">古い順</option>
+      <option value="title_asc" data-i18n="sort_title_asc">タイトル順</option>
+    </select>
+  </div>
+  <div id="artworkList"></div>
+
+  <!-- 広告：一覧下部 -->
+  <div class="ad-unit">
+    <span class="ad-label">スポンサー</span>
+    <!-- admax -->
+    <script src="https://adm.shinobi.jp/s/9728b4be9fb26812752bf28927420563"></script>
+    <!-- admax -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-4492038278621252"
+         data-ad-slot="auto"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+</div>
+
+<!-- SEARCH SCREEN -->
+<div id="screen-search" class="screen search-screen">
+  <div class="search-title" data-i18n="search_title">ハッシュから逆探索</div>
+  <div class="search-sub" data-i18n="search_sub">SHA-256ハッシュ値を入力すると、対応する作品と登録日時を照合します。第三者への制作時期証明に使用できます。</div>
+
+  <label class="form-label">SHA-256 ハッシュ値</label>
+  <input class="form-input" id="searchHashInput" type="text" data-i18n-placeholder="ph_hash" placeholder="例: a3f2b1c4d5e6..." style="font-size:11px;">
+  <button class="btn btn-primary" onclick="searchByHash()" style="margin-top:12px;" data-i18n="btn_verify">照合する</button>
+
+  <div class="search-result" id="searchResult">
+    <div class="result-match">
+      <img class="result-img" id="resultImg" src="" alt="">
+      <div>
+        <div class="result-title" id="resultTitle"></div>
+        <div class="result-sub" id="resultSub"></div>
+      </div>
+    </div>
+    <div id="resultDetails"></div>
+  </div>
+
+  <div class="no-result" id="noResult">
+    <div style="margin-bottom:12px;color:var(--muted);"><svg width="36" height="36" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.8"/><line x1="13" y1="13" x2="17.5" y2="17.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+    <div style="font-family:'Shippori Mincho',serif;font-size:14px;color:var(--ink);margin-bottom:6px;" data-i18n="no_result_title">作品が見つかりません</div>
+    <div style="font-size:11px;" data-i18n="no_result_sub">このハッシュに対応する登録作品はありません</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div style="margin-top:0;">
+    <div class="search-title" style="font-size:16px;margin-bottom:6px;" data-i18n="rehash_title">写真から再ハッシュ</div>
+    <div class="search-sub" style="margin-bottom:12px;" data-i18n="rehash_sub">同じ写真ファイルのハッシュを再計算して照合します。</div>
+    <div class="upload-zone" style="padding:28px 16px;" id="rehashZone">
+      <input type="file" accept="image/jpeg,image/png,image/gif,image/webp,image/tiff" onchange="rehashFile(event)">
+      <span class="upload-icon" style="font-size:32px;display:block;text-align:center;"><svg width="36" height="36" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><rect x="2" y="6" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M7 6V5a1 1 0 011-1h4a1 1 0 011 1v1" stroke="currentColor" stroke-width="1.4"/><circle cx="10" cy="11.5" r="2.8" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="8.5" r="1" fill="currentColor"/></svg></span>
+      <div class="upload-title" style="font-size:14px;" data-i18n="rehash_btn">写真を選んで照合</div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL SCREEN (hidden, shown programmatically) -->
+<div id="screen-detail" class="screen detail-screen">
+  <button class="back-btn" onclick="goBack()" data-i18n="btn_back">← 一覧に戻る</button>
+  <div id="detailContent"></div>
+</div>
+
+<!-- HELP SCREEN -->
+<div id="screen-help" class="screen help-screen">
+
+  <!-- Hero -->
+  <div class="help-hero">
+    <div class="help-hero-title" data-i18n="help_hero_title">ArtStampsとは何か、<br>なぜ必要なのか</div>
+    <div class="help-hero-body" data-i18n="help_hero_body">
+      物理的な作品が「いつ存在していたか」を、第三者が改ざん不可能な形で証明するシステムです。
+      ビットコインのブロックチェーンに作品のデジタル指紋を刻み込むことで、
+      作成日時の永続的な証拠を残します。
+    </div>
+  </div>
+
+  <!-- OTSの仕組み -->
+  <div class="help-section">
+    <div class="help-section-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path d="M7.5 10.5a4 4 0 005.66 0l2-2a4 4 0 00-5.66-5.66l-1 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10.5 7.5a4 4 0 00-5.66 0l-2 2a4 4 0 005.66 5.66l1-1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> <span data-i18n="help_ots_title">OpenTimestampsの仕組み</span></div>
+    <div class="chain-diagram">
+      <div class="chain-node" data-i18n="chain_photo">作品写真</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-node" data-i18n="chain_hash">SHA-256<br>ハッシュ</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-node" data-i18n="chain_ots">OTS<br>サーバー</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-node" data-i18n="chain_btc">Bitcoin<br>ブロック</div>
+    </div>
+    <div class="info-section">
+      <div class="info-section-title" data-i18n="help_points">ポイント</div>
+      <div class="verify-step"><span class="verify-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><rect x="3" y="8" width="12" height="8" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M6 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="9" cy="12" r="1.2" fill="currentColor"/></svg></span><span data-i18n="help_point1">写真そのものはブロックチェーンに保存されません。SHA-256という数学的な「指紋」だけが記録されます。プライバシーは守られます。</span></div>
+      <div class="verify-step"><span class="verify-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><rect x="1" y="6" width="7" height="6" rx="3" stroke="currentColor" stroke-width="1.6"/><rect x="10" y="6" width="7" height="6" rx="3" stroke="currentColor" stroke-width="1.6"/><line x1="8" y1="9" x2="10" y2="9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span data-i18n="help_point2">ビットコインブロックチェーンは世界中のコンピュータが維持しており、誰も過去のデータを書き換えられません。</span></div>
+      <div class="verify-step"><span class="verify-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><rect x="2" y="3" width="14" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><line x1="2" y1="7" x2="16" y2="7" stroke="currentColor" stroke-width="1.3"/><line x1="6" y1="1" x2="6" y2="5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="12" y1="1" x2="12" y2="5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="9" cy="11" r="1.2" fill="currentColor"/></svg></span><span data-i18n="help_point3">ブロックに組み込まれた時点のタイムスタンプが「この日時以前に作品が存在した」証明になります。</span></div>
+    </div>
+  </div>
+
+  <!-- 使い方ステップ -->
+  <div class="help-section">
+    <div class="help-section-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><rect x="3" y="2" width="12" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><line x1="6" y1="6" x2="12" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="6" y1="9" x2="12" y2="9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="6" y1="12" x2="10" y2="12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> <span data-i18n="help_steps_title">ステップごとの使い方</span></div>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title" data-i18n="step1_title">作品を撮影する</div>
+          <div class="step-desc" data-i18n="step1_desc">完成した作品をスマホで撮影します。同じファイルが証拠になるので、撮影後は元ファイルを保存しておいてください。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title" data-i18n="step2_title">「登録」タブで写真をアップロード</div>
+          <div class="step-desc" data-i18n="step2_desc">写真を選ぶと自動でSHA-256ハッシュが生成されます。作品タイトル・素材・サイズなどのメモも入力できます。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title" data-i18n="step3_title">「タイムスタンプを取得する」をタップ</div>
+          <div class="step-desc" data-i18n="step3_desc">ハッシュがOpenTimestampsサーバーに送信されます。OTSファイルが発行され、作品一覧に保存されます。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title" data-i18n="step4_title">数時間〜数日待つ</div>
+          <div class="step-desc" data-i18n="step4_desc">ビットコインのブロックに組み込まれると「確認済み」ステータスになります。これで証明完了です。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title" data-i18n="step5_title">OTSファイルを保存・保管する</div>
+          <div class="step-desc" data-i18n="step5_desc">作品詳細からOTSファイルをダウンロードし、クラウドストレージなど安全な場所に保管してください。このファイルが証拠書類になります。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第三者による検証方法 -->
+  <div class="help-section">
+    <div class="help-section-title"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.8"/><line x1="13" y1="13" x2="17.5" y2="17.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> <span data-i18n="help_verify_title">第三者による検証方法</span></div>
+    <div class="verify-box">
+      <div class="verify-step"><span class="verify-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/><text x="10" y="14" font-family="DM Mono,monospace" font-size="10" fill="currentColor" text-anchor="middle" font-weight="500">1</text></svg></span><span data-i18n="verify1">作品の写真ファイルと.otsファイルの両方を受け取る</span></div>
+      <div class="verify-step"><span class="verify-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/><text x="10" y="14" font-family="DM Mono,monospace" font-size="10" fill="currentColor" text-anchor="middle" font-weight="500">2</text></svg></span><span data-i18n="verify2"><strong>opentimestamps.org</strong> にアクセスし、写真ファイルと.otsファイルをアップロード</span></div>
+      <div class="verify-step"><span class="verify-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/><text x="10" y="14" font-family="DM Mono,monospace" font-size="10" fill="currentColor" text-anchor="middle" font-weight="500">3</text></svg></span><span data-i18n="verify3">サイトが自動でビットコインブロックチェーンと照合し、タイムスタンプを表示する</span></div>
+      <div class="verify-step"><span class="verify-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/><text x="10" y="14" font-family="DM Mono,monospace" font-size="10" fill="currentColor" text-anchor="middle" font-weight="500">4</text></svg></span><span data-i18n="verify4">表示された日時が「この作品がその時点で存在していた」証明になる</span></div>
+      <div class="verify-step"><span class="verify-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path d="M9 2L16.5 15H1.5L9 2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><line x1="9" y1="8" x2="9" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="13.5" r="0.9" fill="currentColor"/></svg></span><span data-i18n="verify5">写真ファイルが1バイトでも変更されるとハッシュが変わり、検証に失敗します。オリジナルファイルを改ざんしないよう保管してください。</span></div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="help-section">
+    <div class="help-section-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M7 7a2 2 0 013.2 1.6C10.2 9.6 9 10 9 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="13" r="0.9" fill="currentColor"/></svg> <span data-i18n="help_faq_title">よくある質問</span></div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)" data-i18n="faq1_q">写真を編集・トリミングしたらどうなる？</div>
+        <div class="faq-a" data-i18n="faq1_a">ファイルが変わるとSHA-256ハッシュも変わるため、証明が無効になります。登録後のオリジナルファイルは絶対に変更しないでください。編集版が必要な場合は別途登録することをおすすめします。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)" data-i18n="faq2_q">iPhoneで撮った写真をそのまま使っていい？</div>
+        <div class="faq-a" data-i18n="faq2_a">注意が必要です。iPhoneはデフォルトでHEIC形式で保存しますが、送信時に自動でJPEGに変換することがあります。変換されるとハッシュが変わり証明が無効になります。登録に使ったファイルと全く同じファイルを原本として保管してください。設定 → カメラ → フォーマットを「互換性優先」にするとJPEGで統一できます。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)" data-i18n="faq3_q">LINEやメールで送った画像で登録してもいい？</div>
+        <div class="faq-a" data-i18n="faq3_a">いいえ、使わないでください。LINEやメール、SNSで送受信した画像は自動的に圧縮・変換されます。圧縮された時点でハッシュが変わるため、後から検証できなくなります。必ずカメラロールのオリジナルファイルを直接使用してください。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)" data-i18n="faq4_q">「待機中」のままずっと変わらない</div>
+        <div class="faq-a" data-i18n="faq4_a">ビットコインブロックへの組み込みには通常数時間〜最大2日かかります。OTSファイルが発行されていれば証明は開始されています。ArtStampsはアプリを開くたびに待機中の作品を自動でチェックし、ブロックチェーンへの組み込みが確認できた時点で「確認済み」に自動更新されます。確認にはインターネット接続が必要です。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)" data-i18n="faq5_q">このアプリのデータはどこに保存される？</div>
+        <div class="faq-a" data-i18n="faq5_a">すべてのデータはお使いのデバイスのローカルストレージに保存されます。サーバーには一切送信されません。ブラウザのデータを消去すると作品データも消えるため、OTSファイルは別途バックアップしてください。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)" data-i18n="faq6_q">著作権の登録になるの？</div>
+        <div class="faq-a" data-i18n="faq6_a">著作権そのものの登録ではありません。「この作品がこの日時以前に存在していた」という事実の証明です。著作権の発生は創作した時点で自動的に生じますが、OTSはその証拠を強化するツールとして有効です。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)" data-i18n="faq7_q">無料でずっと使える？</div>
+        <div class="faq-a" data-i18n="faq7_a">はい。ArtStampsは現代美術のコミュニティへの貢献として永続的に無料で提供します。OpenTimestamps自体もオープンソースの無料サービスです。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)" data-i18n="faq8_q">機種変更したらデータは消える？</div>
+        <div class="faq-a" data-i18n="faq8_a">ブラウザのローカルストレージはデバイスに依存するため、機種変更時にはデータが引き継がれません。OTSファイルとオリジナル写真をクラウド（iCloud・Google Driveなど）にバックアップしておくことを強くおすすめします。</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TUTORIAL OVERLAY -->
+<div class="tutorial-overlay" id="tutorialOverlay" style="display:none;">
+  <div class="tutorial-card">
+    <div class="tutorial-step-indicator" id="tutorialDots"></div>
+    <span class="tutorial-icon" id="tutorialIcon"></span>
+    <div class="tutorial-title" id="tutorialTitle"></div>
+    <div class="tutorial-body" id="tutorialBody"></div>
+    <div class="tutorial-btns">
+      <button class="tutorial-skip" onclick="closeTutorial()">スキップ</button>
+      <button class="tutorial-next" id="tutorialNextBtn" onclick="nextTutorial()">次へ →</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== i18n =====
+const I18N = {
+  ja: {
+    subtitle: '制作時期証明システム',
+    nav_register: '登録', nav_list: '一覧', nav_search: '検索', nav_help: '使い方',
+    upload_title: '作品写真を選択',
+    upload_sub: 'タップして写真を選ぶ・またはドロップ',
+    label_title: '作品タイトル *', ph_title: '例: 無題 #12',
+    label_year: '制作年', label_size: 'サイズ',
+    label_material: '素材・技法', ph_material: '例: 油彩、キャンバス',
+    label_memo: 'メモ', ph_memo: '制作背景、展示履歴など...',
+    hash_label: 'SHA-256 ハッシュ値',
+    btn_submit: 'タイムスタンプを取得する',
+    ots_note: 'SHA-256ハッシュを生成後、OpenTimestamps APIへ送信します。ビットコインブロックチェーンへの組み込みには通常数時間〜数日かかります。OTSファイルは作品一覧からダウンロード可能です。',
+    list_title: '作品一覧',
+    search_title: 'ハッシュから逆探索',
+    search_sub: 'SHA-256ハッシュ値を入力すると、対応する作品と登録日時を照合します。第三者への制作時期証明に使用できます。',
+    ph_hash: '例: a3f2b1c4d5e6...',
+    btn_verify: '照合する',
+    no_result_title: '作品が見つかりません',
+    no_result_sub: 'このハッシュに対応する登録作品はありません',
+    rehash_title: '写真から再ハッシュ',
+    rehash_sub: '同じ写真ファイルのハッシュを再計算して照合します。',
+    rehash_btn: '写真を選んで照合',
+    btn_back: '← 一覧に戻る',
+    status_confirmed: 'ブロックチェーン確認済み', status_pending: 'タイムスタンプ待機中',
+    registered: '登録:', count_suffix: '点',
+    empty_text: 'まだ登録された作品がありません',
+    empty_sub: '「登録」タブから最初の作品を登録してください',
+    download_btn: '⬇ OTSファイルをダウンロード',
+    delete_btn: 'この作品を削除',
+    ad_label: 'スポンサー',
+    toast_copy: 'ハッシュをコピーしました',
+    toast_download: 'ダウンロードしました',
+    toast_delete: '削除しました',
+    toast_registered: '✔ 登録完了！OTS受付済み',
+    toast_registered_pending: '登録完了（OTSはネット接続後に自動送信）',
+    toast_no_title: 'タイトルを入力してください',
+    toast_no_hash: 'ハッシュ値を入力してください',
+    toast_found: '✔ 作品が見つかりました',
+    toast_not_found: '一致する作品は登録されていません',
+    toast_copied: 'ハッシュをコピーしました',
+    confirm_delete: 'この作品の記録を削除しますか？',
+    info_status: 'ステータス', info_registered: '登録日時', info_material: '素材',
+    filter_all: 'すべて', filter_pending: '待機中', filter_confirmed: '確認済み',
+    sort_date_desc: '新しい順', sort_date_asc: '古い順', sort_title_asc: 'タイトル順',
+    btn_retry_ots: 'OTS再送信', btn_certificate: '証明書PDFを生成',
+    toast_retry_ok: '✔ OTS再送信完了', toast_retry_fail: 'OTS送信失敗（後でもう一度お試しください）',
+    toast_retry_sending: 'OTS送信中...',
+    toast_no_photo: '写真を選択してください',
+    toast_no_ots: 'OTSデータがありません',
+    toast_confirmed: '✔ {n}件がブロックチェーンで確認されました',
+    toast_resubmitted: '✔ {n}件をOTSに再送信しました',
+    toast_ots_lib_missing: 'OTSライブラリ未ロード。ネット接続を確認してください。',
+    tutorial_start: '始める ✓', tutorial_next: '次へ →',
+    pwa_title: 'ホーム画面に追加', pwa_sub: 'オフラインでも使えます',
+    pwa_later: '後で', pwa_install: 'インストール',
+    toast_popup_blocked: 'ポップアップをブロックしています。許可してください。',
+    toast_cert_downloaded: '証明書HTMLをダウンロードしました。ブラウザで開いて印刷してください。',
+    cert_registered_artwork: '登録作品',
+    cert_ots_obtained: '取得済み (.otsファイル保存済み)',
+    info_artwork_title: '作品情報',
+    info_year: '制作年', info_size: 'サイズ', info_memo: 'メモ',
+    info_proof_title: '制作時期証明',
+    filter_empty: 'このフィルターに一致する作品はありません。',
+    ots_pending_note: 'OTSデータがまだ取得されていません。オンライン接続後に再度登録するか、OpenTimestamps公式サイト（opentimestamps.org）で手動送信が可能です。',
+    cert_title: '制作時期証明書', cert_issued: '発行日', cert_artwork: '作品名',
+    cert_hash: 'SHA-256 ハッシュ', cert_registered: '登録日時', cert_status: 'ステータス',
+    cert_material: '素材・技法', cert_year: '制作年', cert_size: 'サイズ',
+    cert_footer: 'この証明書はBitcoinブロックチェーンを基盤とするOpenTimestampsにより発行されています。',
+    cert_verify: '検証: opentimestamps.org',
+    // Help screen
+    help_hero_title: 'ArtStampsとは何か、<br>なぜ必要なのか',
+    help_hero_body: '物理的な作品が「いつ存在していたか」を、第三者が改ざん不可能な形で証明するシステムです。ビットコインのブロックチェーンに作品のデジタル指紋を刻み込むことで、作成日時の永続的な証拠を残します。',
+    help_ots_title: 'OpenTimestampsの仕組み',
+    chain_photo: '作品写真', chain_hash: 'SHA-256\nハッシュ', chain_ots: 'OTS\nサーバー', chain_btc: 'Bitcoin\nブロック',
+    help_points: 'ポイント',
+    help_point1: '写真そのものはブロックチェーンに保存されません。SHA-256という数学的な「指紋」だけが記録されます。プライバシーは守られます。',
+    help_point2: 'ビットコインブロックチェーンは世界中のコンピュータが維持しており、誰も過去のデータを書き換えられません。',
+    help_point3: 'ブロックに組み込まれた時点のタイムスタンプが「この日時以前に作品が存在した」証明になります。',
+    help_steps_title: 'ステップごとの使い方',
+    step1_title: '作品を撮影する', step1_desc: '完成した作品をスマホで撮影します。同じファイルが証拠になるので、撮影後は元ファイルを保存しておいてください。',
+    step2_title: '「登録」タブで写真をアップロード', step2_desc: '写真を選ぶと自動でSHA-256ハッシュが生成されます。作品タイトル・素材・サイズなどのメモも入力できます。',
+    step3_title: '「タイムスタンプを取得する」をタップ', step3_desc: 'ハッシュがOpenTimestampsサーバーに送信されます。OTSファイルが発行され、作品一覧に保存されます。',
+    step4_title: '数時間〜数日待つ', step4_desc: 'ビットコインのブロックに組み込まれると「確認済み」ステータスになります。これで証明完了です。',
+    step5_title: 'OTSファイルを保存・保管する', step5_desc: '作品詳細からOTSファイルをダウンロードし、クラウドストレージなど安全な場所に保管してください。このファイルが証拠書類になります。',
+    help_verify_title: '第三者による検証方法',
+    verify1: '作品の写真ファイルと.otsファイルの両方を受け取る',
+    verify2: 'opentimestamps.org にアクセスし、写真ファイルと.otsファイルをアップロード',
+    verify3: 'サイトが自動でビットコインブロックチェーンと照合し、タイムスタンプを表示する',
+    verify4: '表示された日時が「この作品がその時点で存在していた」証明になる',
+    verify5: '写真ファイルが1バイトでも変更されるとハッシュが変わり、検証に失敗します。オリジナルファイルを改ざんしないよう保管してください。',
+    help_faq_title: 'よくある質問',
+    faq1_q: '写真を編集・トリミングしたらどうなる？', faq1_a: 'ファイルが変わるとSHA-256ハッシュも変わるため、証明が無効になります。登録後のオリジナルファイルは絶対に変更しないでください。編集版が必要な場合は別途登録することをおすすめします。',
+    faq2_q: 'iPhoneで撮った写真をそのまま使っていい？', faq2_a: '注意が必要です。iPhoneはデフォルトでHEIC形式で保存しますが、送信時に自動でJPEGに変換することがあります。変換されるとハッシュが変わり証明が無効になります。登録に使ったファイルと全く同じファイルを原本として保管してください。設定 → カメラ → フォーマットを「互換性優先」にするとJPEGで統一できます。',
+    faq3_q: 'LINEやメールで送った画像で登録してもいい？', faq3_a: 'いいえ、使わないでください。LINEやメール、SNSで送受信した画像は自動的に圧縮・変換されます。圧縮された時点でハッシュが変わるため、後から検証できなくなります。必ずカメラロールのオリジナルファイルを直接使用してください。',
+    faq4_q: '「待機中」のままずっと変わらない', faq4_a: 'ビットコインブロックへの組み込みには通常数時間〜最大2日かかります。OTSファイルが発行されていれば証明は開始されています。ArtStampsはアプリを開くたびに待機中の作品を自動でチェックし、ブロックチェーンへの組み込みが確認できた時点で「確認済み」に自動更新されます。確認にはインターネット接続が必要です。',
+    faq5_q: 'このアプリのデータはどこに保存される？', faq5_a: 'すべてのデータはお使いのデバイスのローカルストレージに保存されます。サーバーには一切送信されません。ブラウザのデータを消去すると作品データも消えるため、OTSファイルは別途バックアップしてください。',
+    faq6_q: '著作権の登録になるの？', faq6_a: '著作権そのものの登録ではありません。「この作品がこの日時以前に存在していた」という事実の証明です。著作権の発生は創作した時点で自動的に生じますが、OTSはその証拠を強化するツールとして有効です。',
+    faq7_q: '無料でずっと使える？', faq7_a: 'はい。ArtStampsは現代美術のコミュニティへの貢献として永続的に無料で提供します。OpenTimestamps自体もオープンソースの無料サービスです。',
+    faq8_q: '機種変更したらデータは消える？', faq8_a: 'ブラウザのローカルストレージはデバイスに依存するため、機種変更時にはデータが引き継がれません。OTSファイルとオリジナル写真をクラウド（iCloud・Google Driveなど）にバックアップしておくことを強くおすすめします。',
+  },
+  en: {
+    subtitle: 'Artwork Dating Certification',
+    nav_register: 'Register', nav_list: 'Gallery', nav_search: 'Verify', nav_help: 'Guide',
+    upload_title: 'Select Artwork Photo',
+    upload_sub: 'Tap to choose a photo or drop here',
+    label_title: 'Artwork Title *', ph_title: 'e.g. Untitled #12',
+    label_year: 'Year', label_size: 'Size',
+    label_material: 'Medium / Technique', ph_material: 'e.g. Oil on canvas',
+    label_memo: 'Notes', ph_memo: 'Creation notes, exhibition history...',
+    hash_label: 'SHA-256 Hash',
+    btn_submit: 'Get Timestamp',
+    ots_note: 'Generates a SHA-256 hash and sends it to the OpenTimestamps API. Bitcoin blockchain confirmation typically takes a few hours to days. Download the OTS file from the artwork detail page.',
+    list_title: 'Gallery',
+    search_title: 'Lookup by Hash',
+    search_sub: 'Enter a SHA-256 hash to find the matching artwork and verify its timestamp for third-party proof.',
+    ph_hash: 'e.g. a3f2b1c4d5e6...',
+    btn_verify: 'Verify',
+    no_result_title: 'No artwork found',
+    no_result_sub: 'No registered artwork matches this hash',
+    rehash_title: 'Re-hash from Photo',
+    rehash_sub: 'Recalculate the hash from the original photo file to verify.',
+    rehash_btn: 'Select photo to verify',
+    btn_back: '← Back to Gallery',
+    status_confirmed: 'Blockchain Confirmed', status_pending: 'Awaiting Timestamp',
+    registered: 'Registered:', count_suffix: ' works',
+    empty_text: 'No artworks registered yet',
+    empty_sub: 'Register your first artwork from the Register tab',
+    download_btn: '⬇ Download OTS File',
+    delete_btn: 'Delete this artwork',
+    ad_label: 'Sponsor',
+    toast_copy: 'Hash copied',
+    toast_download: 'Downloaded',
+    toast_delete: 'Deleted',
+    toast_registered: '✔ Registered! OTS submitted',
+    toast_registered_pending: 'Registered (OTS will send when online)',
+    toast_no_title: 'Please enter a title',
+    toast_no_hash: 'Please enter a hash value',
+    toast_found: '✔ Artwork found',
+    toast_not_found: 'No matching artwork found',
+    toast_copied: 'Hash copied',
+    confirm_delete: 'Delete this artwork record?',
+    info_status: 'Status', info_registered: 'Registered', info_material: 'Medium',
+    filter_all: 'All', filter_pending: 'Pending', filter_confirmed: 'Confirmed',
+    sort_date_desc: 'Newest first', sort_date_asc: 'Oldest first', sort_title_asc: 'By title',
+    btn_retry_ots: 'Retry OTS', btn_certificate: 'Generate Certificate PDF',
+    toast_retry_ok: '✔ OTS resubmitted', toast_retry_fail: 'OTS failed (try again later)',
+    toast_retry_sending: 'Sending to OTS...',
+    toast_no_photo: 'Please select a photo',
+    toast_no_ots: 'No OTS data available',
+    toast_confirmed: '✔ {n} artwork(s) confirmed on blockchain',
+    toast_resubmitted: '✔ {n} artwork(s) resubmitted to OTS',
+    toast_ots_lib_missing: 'OTS library not loaded. Please check your connection.',
+    tutorial_start: 'Get Started ✓', tutorial_next: 'Next →',
+    pwa_title: 'Add to Home Screen', pwa_sub: 'Works offline too',
+    pwa_later: 'Later', pwa_install: 'Install',
+    toast_popup_blocked: 'Pop-ups are blocked. Please allow them for this site.',
+    toast_cert_downloaded: 'Certificate downloaded. Open it in your browser to print.',
+    cert_registered_artwork: 'Registered Artwork',
+    cert_ots_obtained: 'Obtained (saved as .ots file)',
+    info_artwork_title: 'Artwork Info',
+    info_year: 'Year', info_size: 'Size', info_memo: 'Notes',
+    info_proof_title: 'Proof of Creation Date',
+    filter_empty: 'No artworks match this filter.',
+    ots_pending_note: 'OTS data not yet available. Connect online to retry, or manually submit at opentimestamps.org.',
+    cert_title: 'Certificate of Creation Date', cert_issued: 'Issued',
+    cert_artwork: 'Artwork', cert_hash: 'SHA-256 Hash',
+    cert_registered: 'Registered', cert_status: 'Status',
+    cert_material: 'Medium', cert_year: 'Year', cert_size: 'Size',
+    cert_footer: 'This certificate is backed by OpenTimestamps, anchored to the Bitcoin blockchain.',
+    cert_verify: 'Verify at: opentimestamps.org',
+    // Help screen
+    help_hero_title: 'What is ArtStamps<br>and why does it matter?',
+    help_hero_body: 'A system that proves when a physical artwork existed — in a way no third party can tamper with. By embedding a digital fingerprint of your artwork in the Bitcoin blockchain, it creates a permanent record of its creation date.',
+    help_ots_title: 'How OpenTimestamps Works',
+    chain_photo: 'Artwork\nPhoto', chain_hash: 'SHA-256\nHash', chain_ots: 'OTS\nServer', chain_btc: 'Bitcoin\nBlock',
+    help_points: 'Key Points',
+    help_point1: 'The photo itself is never stored on the blockchain — only a mathematical "fingerprint" via SHA-256. Your privacy is fully protected.',
+    help_point2: 'The Bitcoin blockchain is maintained by computers worldwide. No one can alter past data.',
+    help_point3: 'The timestamp recorded in the block proves that the artwork existed before that date and time.',
+    help_steps_title: 'Step-by-Step Guide',
+    step1_title: 'Photograph your artwork', step1_desc: 'Take a photo of your completed work with your smartphone. The exact same file will serve as your evidence — keep the original safe.',
+    step2_title: 'Upload via the Register tab', step2_desc: 'Selecting a photo automatically generates a SHA-256 hash. You can also add the title, medium, size, and notes.',
+    step3_title: 'Tap "Get Timestamp"', step3_desc: 'Your hash is sent to the OpenTimestamps server. An OTS file is issued and saved to your artwork list.',
+    step4_title: 'Wait a few hours to days', step4_desc: 'Once embedded in a Bitcoin block, the status changes to "Blockchain Confirmed." Your proof is complete.',
+    step5_title: 'Save and back up the OTS file', step5_desc: 'Download the OTS file from the artwork detail page and store it somewhere safe (cloud storage, etc.). This file is your evidence document.',
+    help_verify_title: 'Third-Party Verification',
+    verify1: 'Obtain both the original photo file and the .ots file',
+    verify2: 'Go to opentimestamps.org and upload both the photo and .ots file',
+    verify3: 'The site automatically checks against the Bitcoin blockchain and displays the timestamp',
+    verify4: 'The date shown proves the artwork existed at or before that moment',
+    verify5: 'Even a single-byte change to the photo will invalidate the hash and fail verification. Never modify the original file.',
+    help_faq_title: 'Frequently Asked Questions',
+    faq1_q: 'What if I edit or crop the photo?', faq1_a: 'Any change to the file will change the SHA-256 hash, making the proof invalid. Never modify the original registered file. If you need an edited version, register it separately.',
+    faq2_q: 'Can I use a photo taken directly on iPhone?', faq2_a: 'Use caution. iPhones save photos in HEIC format by default, but may auto-convert to JPEG when sharing. This changes the hash and invalidates the proof. Always keep the exact file you registered. Go to Settings → Camera → Formats → "Most Compatible" to shoot in JPEG.',
+    faq3_q: 'Can I use an image sent via LINE or email?', faq3_a: 'No. Images sent through LINE, email, or social media are automatically compressed or converted. This changes the hash, making later verification impossible. Always use the original file directly from your camera roll.',
+    faq4_q: 'It\'s been "Pending" for a long time', faq4_a: 'Embedding into a Bitcoin block typically takes a few hours to up to 2 days. As long as the OTS file was issued, your proof has started. ArtStamps automatically checks pending artworks each time you open the app, and updates to "Confirmed" once blockchain inclusion is detected. An internet connection is required.',
+    faq5_q: 'Where is my data stored?', faq5_a: 'All data is stored locally on your device. Nothing is sent to any server. Clearing your browser data will also delete your artwork records, so be sure to back up your OTS files separately.',
+    faq6_q: 'Does this register my copyright?', faq6_a: 'No — copyright is not registered here. This proves that your artwork existed before a certain date and time. Copyright arises automatically at creation, but OTS provides strong supporting evidence.',
+    faq7_q: 'Is this free forever?', faq7_a: 'Yes. ArtStamps is offered permanently free as a contribution to the contemporary art community. OpenTimestamps itself is also a free, open-source service.',
+    faq8_q: 'Will my data be lost if I switch devices?', faq8_a: 'Browser local storage is device-specific, so data will not transfer when you switch devices. We strongly recommend backing up your OTS files and original photos to cloud storage (iCloud, Google Drive, etc.).',
+  }
+};
+
+let currentLang = (navigator.language || 'ja').startsWith('ja') ? 'ja' : 'en';
+
+function t(key) {
+  return I18N[currentLang][key] || I18N['ja'][key] || key;
+}
+
+function applyLang() {
+  // Keys that use innerHTML (may contain HTML tags like <br>)
+  const innerHTMLKeys = new Set(['help_hero_title', 'help_hero_body']);
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = t(key);
+    if (innerHTMLKeys.has(key)) {
+      el.innerHTML = val;
+    } else {
+      el.textContent = val;
+    }
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+  });
+  document.getElementById('langToggle').textContent = currentLang === 'ja' ? 'EN' : 'JA';
+  document.documentElement.lang = currentLang;
+  renderList();
+}
+
+function toggleLang() {
+  currentLang = currentLang === 'ja' ? 'en' : 'ja';
+  localStorage.setItem('artstamps_lang', currentLang);
+  applyLang();
+}
+
+// ===== STATE =====
+let artworks = JSON.parse(localStorage.getItem('artstamp_artworks') || '[]');
+let currentFile = null;
+let currentHash = null;
+let lastListScreen = 'list';
+let currentFilter = 'all';
+
+function saveArtworks() {
+  localStorage.setItem('artstamp_artworks', JSON.stringify(artworks));
+}
+
+// ===== NAVIGATION =====
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach((b, i) => {
+    b.classList.toggle('active', ['upload','list','search','help'][i] === name);
+  });
+  document.getElementById('screen-' + name).classList.add('active');
+  if (name === 'list') renderList();
+}
+
+function goBack() {
+  showScreen('list');
+}
+
+// ===== FILE HANDLING =====
+function handleFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  currentFile = file;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    document.getElementById('previewImg').src = e.target.result;
+    document.getElementById('previewSection').classList.add('visible');
+    computeHash(file);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function computeHash(file) {
+  const buffer = await file.arrayBuffer();
+  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  currentHash = hashHex;
+
+  document.getElementById('hashValue').textContent = hashHex;
+  document.getElementById('hashDisplay').classList.add('visible');
+  document.getElementById('submitBtn').disabled = false;
+}
+
+// ===== SUBMIT =====
+async function submitArtwork() {
+  const title = document.getElementById('titleInput').value.trim();
+  if (!title) { showToast(t('toast_no_title')); return; }
+  if (!currentHash) { showToast(t('toast_no_photo')); return; }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spinner"></span>${t('toast_retry_sending')}`;
+
+  const progressBar = document.getElementById('progressBar');
+  const progressFill = document.getElementById('progressFill');
+  progressBar.classList.add('visible');
+
+  // Animate progress
+  let prog = 0;
+  const interval = setInterval(() => {
+    prog = Math.min(prog + Math.random() * 15, 85);
+    progressFill.style.width = prog + '%';
+  }, 300);
+
+  try {
+    // Netlifyプロキシ経由でOTSにスタンプ
+    let otsBase64 = null;
+    const result = await submitHashToOTS(currentHash);
+    if (result) otsBase64 = result.otsBase64;
+
+    clearInterval(interval);
+    progressFill.style.width = '100%';
+
+    // Get image data URL
+    const imgSrc = document.getElementById('previewImg').src;
+
+    const artwork = {
+      id: Date.now().toString(),
+      title,
+      year: document.getElementById('yearInput').value.trim(),
+      size: document.getElementById('sizeInput').value.trim(),
+      material: document.getElementById('materialInput').value.trim(),
+      memo: document.getElementById('memoInput').value.trim(),
+      hash: currentHash,
+      registeredAt: new Date().toISOString(),
+      status: 'pending',
+      otsData: otsBase64,
+      imgSrc
+    };
+
+    artworks.unshift(artwork);
+    saveArtworks();
+
+    setTimeout(() => {
+      progressBar.classList.remove('visible');
+      btn.disabled = false;
+      btn.innerHTML = t('btn_submit');
+      resetUploadForm();
+      showToast(otsBase64 ? t('toast_registered') : t('toast_registered_pending'));
+      showScreen('list');
+    }, 600);
+
+  } catch (err) {
+    clearInterval(interval);
+    progressBar.classList.remove('visible');
+
+    // Save anyway as pending
+    const imgSrc = document.getElementById('previewImg').src;
+    const artwork = {
+      id: Date.now().toString(),
+      title,
+      year: document.getElementById('yearInput').value.trim(),
+      size: document.getElementById('sizeInput').value.trim(),
+      material: document.getElementById('materialInput').value.trim(),
+      memo: document.getElementById('memoInput').value.trim(),
+      hash: currentHash,
+      registeredAt: new Date().toISOString(),
+      status: 'pending',
+      otsData: null,
+      imgSrc
+    };
+
+    artworks.unshift(artwork);
+    saveArtworks();
+
+    btn.disabled = false;
+    btn.innerHTML = t('btn_submit');
+    resetUploadForm();
+    showToast(t('toast_registered_pending'));
+    showScreen('list');
+  }
+}
+
+function resetUploadForm() {
+  document.getElementById('fileInput').value = '';
+  document.getElementById('previewSection').classList.remove('visible');
+  document.getElementById('hashDisplay').classList.remove('visible');
+  document.getElementById('titleInput').value = '';
+  document.getElementById('yearInput').value = '';
+  document.getElementById('sizeInput').value = '';
+  document.getElementById('materialInput').value = '';
+  document.getElementById('memoInput').value = '';
+  document.getElementById('submitBtn').disabled = true;
+  currentFile = null;
+  currentHash = null;
+}
+
+// ===== FILTER =====
+function setFilter(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === filter);
+  });
+  renderList();
+}
+
+// ===== LIST =====
+function renderList() {
+  const container = document.getElementById('artworkList');
+  const badge = document.getElementById('countBadge');
+
+  // Update sort select options text
+  const sel = document.getElementById('sortSelect');
+  if (sel) {
+    Array.from(sel.options).forEach(opt => {
+      if (opt.getAttribute('data-i18n')) opt.text = t(opt.getAttribute('data-i18n'));
+    });
+  }
+  // Update filter button text
+  document.querySelectorAll('.filter-btn[data-i18n]').forEach(b => {
+    b.textContent = t(b.getAttribute('data-i18n'));
+  });
+
+  const sortVal = sel ? sel.value : 'date_desc';
+
+  // Filter
+  let filtered = artworks.filter(a => {
+    if (currentFilter === 'all') return true;
+    return a.status === currentFilter;
+  });
+
+  // Sort
+  filtered = [...filtered].sort((a, b) => {
+    if (sortVal === 'date_desc') return new Date(b.registeredAt) - new Date(a.registeredAt);
+    if (sortVal === 'date_asc') return new Date(a.registeredAt) - new Date(b.registeredAt);
+    if (sortVal === 'title_asc') return a.title.localeCompare(b.title, currentLang);
+    return 0;
+  });
+
+  badge.textContent = artworks.length + t('count_suffix');
+
+  if (filtered.length === 0 && artworks.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:16px;">
+          <!-- Wall -->
+          <rect x="0" y="0" width="120" height="120" fill="#f0f7f4"/>
+          <!-- Shadow under frame -->
+          <ellipse cx="60" cy="98" rx="32" ry="5" fill="#d8ede6"/>
+          <!-- Empty canvas frame -->
+          <rect x="18" y="14" width="84" height="72" rx="3" fill="#faf7f2" stroke="#c8b89a" stroke-width="2"/>
+          <rect x="23" y="19" width="74" height="62" rx="2" fill="#faf7f2" stroke="#e0d0bc" stroke-width="1"/>
+          <!-- Subtle texture lines on blank canvas -->
+          <line x1="23" y1="35" x2="97" y2="35" stroke="#ede8e0" stroke-width="0.6"/>
+          <line x1="23" y1="50" x2="97" y2="50" stroke="#ede8e0" stroke-width="0.6"/>
+          <line x1="23" y1="65" x2="97" y2="65" stroke="#ede8e0" stroke-width="0.6"/>
+          <!-- Question mark / possibility shape in center -->
+          <circle cx="60" cy="50" r="16" fill="#d8ede6" opacity="0.6"/>
+          <text x="60" y="56" font-family="serif" font-size="22" fill="#6a8878" text-anchor="middle" opacity="0.5">?</text>
+          <!-- Hanging wire -->
+          <path d="M45 14 Q60 6 75 14" fill="none" stroke="#c8b89a" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="60" cy="6" r="2" fill="#c8b89a"/>
+          <!-- Nail -->
+          <circle cx="60" cy="5" r="1.5" fill="#6a8878"/>
+          <!-- Palette hint at bottom right -->
+          <ellipse cx="96" cy="95" rx="14" ry="10" fill="#d8ede6" stroke="#c8b89a" stroke-width="1" transform="rotate(-20 96 95)"/>
+          <circle cx="90" cy="90" r="3" fill="#2d6a4f" opacity="0.7"/>
+          <circle cx="97" cy="88" r="2.5" fill="#1a4a3a" opacity="0.7"/>
+          <circle cx="103" cy="92" r="2" fill="#2d6a4f" opacity="0.7"/>
+          <circle cx="94" cy="97" r="2.5" fill="#52b788" opacity="0.7"/>
+          <!-- Brush -->
+          <line x1="80" y1="108" x2="100" y2="82" stroke="#6a8878" stroke-width="2" stroke-linecap="round"/>
+          <ellipse cx="99" cy="81" rx="3" ry="5" fill="#2d6a4f" opacity="0.8" transform="rotate(-40 99 81)"/>
+        </svg>
+        <div class="empty-text">${t('empty_text')}</div>
+        <div class="empty-sub">${t('empty_sub')}</div>
+        <div class="ad-unit" style="margin-top:16px;">
+          <span class="ad-label">スポンサー</span>
+          <div id="admaxEmpty"></div>
+        </div>
+      </div>`;
+    // 空状態のAdMax動的挿入
+    const emptyAd = document.getElementById('admaxEmpty');
+    if (emptyAd) {
+      const s = document.createElement('script');
+      s.src = 'https://adm.shinobi.jp/s/9728b4be9fb26812752bf28927420563';
+      emptyAd.appendChild(s);
+    }
+    return;
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:40px 24px;color:var(--muted);font-size:12px;">${currentFilter !== 'all' ? (t('filter_empty')) : ''}</div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(a => `
+    <div class="artwork-card" onclick="showDetail('${a.id}')">
+      ${a.imgSrc
+        ? `<img class="card-thumb" src="${a.imgSrc}" alt="${escHtml(a.title)}">`
+        : `<div class="card-thumb-placeholder">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="2" width="44" height="44" rx="3" fill="#d8ede6"/>
+              <rect x="6" y="6" width="18" height="14" rx="1" fill="#2d6a4f" opacity="0.5"/>
+              <circle cx="34" cy="13" r="9" fill="#1a4a3a" opacity="0.45"/>
+              <polygon points="6,40 18,24 30,36" fill="#2d6a4f" opacity="0.5"/>
+              <rect x="28" y="28" width="14" height="12" rx="1" fill="#52b788" opacity="0.5"/>
+            </svg>
+           </div>`}
+      <div class="card-info">
+        <div class="card-title">${escHtml(a.title)}</div>
+        <div class="card-date">${formatDate(a.registeredAt)}</div>
+        <span class="status-badge ${a.status === 'confirmed' ? 'status-confirmed' : 'status-pending'}">
+          <span class="status-dot"></span>
+          ${a.status === 'confirmed' ? t('status_confirmed') : t('status_pending')}
+        </span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== DETAIL =====
+function showDetail(id) {
+  const a = artworks.find(x => x.id === id);
+  if (!a) return;
+
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-detail').classList.add('active');
+
+  const content = document.getElementById('detailContent');
+  content.innerHTML = `
+    ${a.imgSrc ? `<img class="detail-img" src="${a.imgSrc}" alt="${escHtml(a.title)}">` : ''}
+    <div class="detail-title">${escHtml(a.title)}</div>
+    <div class="detail-date">${t('registered')} ${formatDate(a.registeredAt)}</div>
+    <span class="status-badge ${a.status === 'confirmed' ? 'status-confirmed' : 'status-pending'}" style="margin-bottom:18px;display:inline-flex;">
+      <span class="status-dot"></span>
+      ${a.status === 'confirmed' ? t('status_confirmed') : t('status_pending')}
+    </span>
+
+    <div class="info-section" style="margin-top:14px;">
+      <div class="info-section-title">${t('info_artwork_title')}</div>
+      ${a.year ? `<div class="info-row"><span class="info-key">${t('info_year')}</span><span class="info-value">${escHtml(a.year)}</span></div>` : ''}
+      ${a.size ? `<div class="info-row"><span class="info-key">${t('info_size')}</span><span class="info-value">${escHtml(a.size)}</span></div>` : ''}
+      ${a.material ? `<div class="info-row"><span class="info-key">${t('info_material')}</span><span class="info-value">${escHtml(a.material)}</span></div>` : ''}
+      ${a.memo ? `<div class="info-row"><span class="info-key">${t('info_memo')}</span><span class="info-value" style="font-size:11px;line-height:1.6;">${escHtml(a.memo)}</span></div>` : ''}
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">${t('info_proof_title')}</div>
+      <div class="info-row">
+        <span class="info-key">${t('info_registered')}</span>
+        <span class="info-value">${formatDateFull(a.registeredAt)}</span>
+      </div>
+      <div class="info-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+        <span class="info-key">SHA-256</span>
+        <span class="hash-value" onclick="copyHash('${a.hash}')">${a.hash}</span>
+        <span class="copy-hint" data-i18n="copy_hint">タップでコピー</span>
+      </div>
+    </div>
+
+    ${a.otsData ? `
+    <button class="download-btn" onclick="downloadOTS('${a.id}')">${t('download_btn')}
+    </button>
+    <button class="cert-btn" onclick="generateCertificate('${a.id}')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path d="M3 2h7l3 3v9H3V2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 2v3h3" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><line x1="5" y1="8" x2="11" y2="8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="5" y1="10.5" x2="11" y2="10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg> ${t('btn_certificate')}</button>` : `
+    <div class="ots-note">
+      ${t('ots_pending_note')}
+    </div>
+    <button class="retry-btn" id="retryBtn_${a.id}" onclick="retryOTS('${a.id}')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path d="M12 7A5 5 0 112 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><polyline points="12,4 12,7 9,7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> ${t('btn_retry_ots')}</button>`}
+
+    <button class="btn" style="background:var(--warm);color:var(--muted);margin-top:12px;" onclick="confirmDelete('${a.id}')">
+      ${t('delete_btn')}
+    </button>
+
+    <div class="ad-unit" id="detailAdUnit">
+      <span class="ad-label">${t('ad_label')}</span>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-4492038278621252"
+           data-ad-slot="auto"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </div>
+  `;
+  // AdSense init for dynamically inserted ad
+  try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+  // 忍者AdMax: template literal内ではscriptタグが動かないため動的に挿入
+  const admaxContainer = document.getElementById('detailAdUnit');
+  if (admaxContainer && !admaxContainer.querySelector('.admax-loaded')) {
+    const s = document.createElement('script');
+    s.src = 'https://adm.shinobi.jp/s/9728b4be9fb26812752bf28927420563';
+    s.className = 'admax-loaded';
+    admaxContainer.appendChild(s);
+  }
+}
+
+function confirmDelete(id) {
+  if (confirm(t('confirm_delete'))) {
+    artworks = artworks.filter(a => a.id !== id);
+    saveArtworks();
+    showToast(t('toast_delete'));
+    showScreen('list');
+  }
+}
+
+// ===== SEARCH =====
+function searchByHash() {
+  const input = document.getElementById('searchHashInput').value.trim().toLowerCase();
+  const result = document.getElementById('searchResult');
+  const noResult = document.getElementById('noResult');
+  result.classList.remove('visible');
+  noResult.classList.remove('visible');
+
+  if (!input) { showToast(t('toast_no_hash')); return; }
+
+  const found = artworks.find(a => a.hash.toLowerCase() === input || a.hash.toLowerCase().includes(input));
+
+  if (found) {
+    document.getElementById('resultImg').src = found.imgSrc || '';
+    document.getElementById('resultTitle').textContent = found.title;
+    document.getElementById('resultSub').textContent = t('registered') + ' ' + formatDate(found.registeredAt);
+    document.getElementById('resultDetails').innerHTML = `
+      <div class="info-row" style="margin-top:8px;">
+        <span class="info-key">${t('info_status')}</span>
+        <span class="status-badge ${found.status === 'confirmed' ? 'status-confirmed' : 'status-pending'}">
+          <span class="status-dot"></span>
+          ${found.status === 'confirmed' ? t('status_confirmed') : t('status_pending')}
+        </span>
+      </div>
+      <div class="info-row"><span class="info-key">${t('info_registered')}</span><span class="info-value">${formatDateFull(found.registeredAt)}</span></div>
+      ${found.material ? `<div class="info-row"><span class="info-key">${t('info_material')}</span><span class="info-value">${escHtml(found.material)}</span></div>` : ''}
+    `;
+    result.classList.add('visible');
+    showToast(t('toast_found'));
+  } else {
+    noResult.classList.add('visible');
+  }
+}
+
+async function rehashFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const buffer = await file.arrayBuffer();
+  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  document.getElementById('searchHashInput').value = hashHex;
+  searchByHash();
+}
+
+// ===== UTILS =====
+function formatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('ja-JP', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+}
+
+function formatDateFull(iso) {
+  const d = new Date(iso);
+  return d.toLocaleString('ja-JP', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' });
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function hexToBytes(hex) {
+  const bytes = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < hex.length; i += 2) {
+    bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+  }
+  return bytes;
+}
+
+function uint8ToBase64(uint8) {
+  let binary = '';
+  for (let i = 0; i < uint8.length; i++) {
+    binary += String.fromCharCode(uint8[i]);
+  }
+  return btoa(binary);
+}
+
+function base64ToUint8(b64) {
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
+function copyHash(hash) {
+  navigator.clipboard.writeText(hash).then(() => showToast(t('toast_copied')));
+}
+
+function downloadOTS(id) {
+  const a = artworks.find(x => x.id === id);
+  if (!a || !a.otsData) { showToast(t('toast_no_ots')); return; }
+  const bytes = base64ToUint8(a.otsData);
+  const blob = new Blob([bytes], { type: 'application/octet-stream' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = a.title.replace(/\s+/g, '_') + '_' + a.hash.slice(0,8) + '.ots';
+  link.click();
+  URL.revokeObjectURL(url);
+  showToast(t('toast_download'));
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2800);
+}
+
+// Drag and drop
+const zone = document.getElementById('uploadZone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+zone.addEventListener('drop', e => {
+  e.preventDefault();
+  zone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('previewImg').src = ev.target.result;
+      document.getElementById('previewSection').classList.add('visible');
+      currentFile = file;
+      computeHash(file);
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// Init
+currentLang = localStorage.getItem('artstamps_lang') || ((navigator.language || 'ja').startsWith('ja') ? 'ja' : 'en');
+applyLang();
+renderList();
+
+// ===== OTS (Netlifyプロキシ経由でCORS回避) =====
+// ブラウザ → /.netlify/functions/ots-stamp → OTSカレンダー
+
+async function submitHashToOTS(hashHex) {
+  try {
+    const hashBytes = hexToBytes(hashHex);
+    const res = await fetch('/.netlify/functions/ots-stamp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/octet-stream' },
+      body: hashBytes.buffer,
+    });
+    if (!res.ok) throw new Error(`proxy error: ${res.status}`);
+    const buf = await res.arrayBuffer();
+    return { otsBase64: uint8ToBase64(new Uint8Array(buf)), calendar: 'netlify-proxy' };
+  } catch (e) {
+    console.warn('OTS stamp failed:', e);
+    return null;
+  }
+}
+
+async function upgradeOTS(otsBase64) {
+  try {
+    const otsBytes = base64ToUint8(otsBase64);
+    const res = await fetch('/.netlify/functions/ots-upgrade', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/octet-stream' },
+      body: otsBytes.buffer,
+    });
+    if (res.status === 204) return null; // まだ未確認（正常）
+    if (!res.ok) throw new Error(`proxy error: ${res.status}`);
+    const buf = await res.arrayBuffer();
+    const newBytes = new Uint8Array(buf);
+    return newBytes.length > otsBytes.length ? uint8ToBase64(newBytes) : null;
+  } catch (e) {
+    console.warn('OTS upgrade failed:', e);
+    return null;
+  }
+}
+
+async function checkPendingArtworks() {
+  const pending = artworks.filter(a => a.status === 'pending');
+  if (pending.length === 0) return;
+
+  let upgraded = 0;
+  let resubmitted = 0;
+
+  for (const artwork of pending) {
+    try {
+      if (!artwork.otsData) {
+        // OTSデータ未取得 → 再スタンプ
+        const result = await submitHashToOTS(artwork.hash);
+        if (result) {
+          artwork.otsData = result.otsBase64;
+          resubmitted++;
+        }
+        continue;
+      }
+      // OTSデータあり → upgrade でBitcoin確認を試みる
+      const newOts = await upgradeOTS(artwork.otsData);
+      if (newOts) {
+        artwork.status = 'confirmed';
+        artwork.confirmedAt = new Date().toISOString();
+        artwork.otsData = newOts;
+        upgraded++;
+      }
+    } catch (e) { /* ネットワークエラーは次回に */ }
+  }
+
+  if (upgraded > 0 || resubmitted > 0) {
+    saveArtworks();
+    renderList();
+    if (upgraded > 0) showToast(t('toast_confirmed').replace('{n}', upgraded));
+    else if (resubmitted > 0) showToast(t('toast_resubmitted').replace('{n}', resubmitted));
+  }
+}
+
+// 起動から2秒後にチェック開始（UIが安定してから）
+setTimeout(checkPendingArtworks, 2000);
+
+// ===== FAQ =====
+function toggleFaq(el) {
+  el.closest('.faq-item').classList.toggle('open');
+}
+
+// ===== TUTORIAL =====
+const TUTORIAL_SVG = [
+  // Step 1: Welcome — abstract art + stamp
+  `<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="6" y="6" width="68" height="68" rx="4" fill="#f0f7f4" stroke="#1a3028" stroke-width="2"/>
+    <rect x="12" y="12" width="30" height="24" rx="2" fill="#2d6a4f" opacity="0.8"/>
+    <circle cx="56" cy="24" r="14" fill="#1a4a3a" opacity="0.75"/>
+    <polygon points="12,66 30,42 50,60" fill="#2d6a4f" opacity="0.75"/>
+    <rect x="44" y="46" width="22" height="18" rx="2" fill="#52b788" opacity="0.8"/>
+    <rect x="6" y="6" width="68" height="68" rx="4" fill="none" stroke="#1a3028" stroke-width="2"/>
+    <line x1="6" y1="18" x2="12" y2="18" stroke="#1a3028" stroke-width="1.5"/>
+    <line x1="18" y1="6" x2="18" y2="12" stroke="#1a3028" stroke-width="1.5"/>
+    <line x1="74" y1="18" x2="68" y2="18" stroke="#1a3028" stroke-width="1.5"/>
+    <line x1="62" y1="6" x2="62" y2="12" stroke="#1a3028" stroke-width="1.5"/>
+    <line x1="6" y1="62" x2="12" y2="62" stroke="#1a3028" stroke-width="1.5"/>
+    <line x1="18" y1="74" x2="18" y2="68" stroke="#1a3028" stroke-width="1.5"/>
+    <line x1="74" y1="62" x2="68" y2="62" stroke="#1a3028" stroke-width="1.5"/>
+    <line x1="62" y1="74" x2="62" y2="68" stroke="#1a3028" stroke-width="1.5"/>
+  </svg>`,
+  // Step 2: Camera / register
+  `<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="8" y="22" width="64" height="44" rx="5" fill="#1a4a3a"/>
+    <rect x="10" y="24" width="60" height="40" rx="4" fill="#223d5e"/>
+    <circle cx="40" cy="46" r="14" fill="#1a3028"/>
+    <circle cx="40" cy="46" r="11" fill="#1a4a3a" stroke="#6a8878" stroke-width="1"/>
+    <circle cx="40" cy="46" r="7" fill="#2d6a4f" opacity="0.6"/>
+    <circle cx="40" cy="46" r="3" fill="#f0f7f4" opacity="0.8"/>
+    <rect x="26" y="14" width="20" height="10" rx="3" fill="#1a4a3a"/>
+    <circle cx="63" cy="31" r="4" fill="#52b788"/>
+    <circle cx="63" cy="31" r="2" fill="#f0f7f4" opacity="0.5"/>
+    <!-- Canvas being photographed -->
+    <rect x="28" y="32" width="24" height="18" rx="1" fill="#f0f7f4" opacity="0.15" stroke="white" stroke-width="0.5" stroke-dasharray="2 2"/>
+  </svg>`,
+  // Step 3: Blockchain chain
+  `<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Chain links -->
+    <rect x="6" y="30" width="20" height="20" rx="5" fill="none" stroke="#52b788" stroke-width="3"/>
+    <rect x="10" y="34" width="12" height="12" rx="3" fill="#52b788" opacity="0.3"/>
+    <rect x="30" y="30" width="20" height="20" rx="5" fill="none" stroke="#2d6a4f" stroke-width="3"/>
+    <rect x="34" y="34" width="12" height="12" rx="3" fill="#2d6a4f" opacity="0.3"/>
+    <rect x="54" y="30" width="20" height="20" rx="5" fill="none" stroke="#1a4a3a" stroke-width="3"/>
+    <rect x="58" y="34" width="12" height="12" rx="3" fill="#1a4a3a" opacity="0.3"/>
+    <!-- Connecting bars -->
+    <rect x="26" y="38" width="4" height="4" rx="1" fill="#52b788"/>
+    <rect x="50" y="38" width="4" height="4" rx="1" fill="#2d6a4f"/>
+    <!-- Hash symbol -->
+    <text x="16" y="44" font-family="monospace" font-size="8" fill="#52b788" text-anchor="middle" font-weight="bold">#</text>
+    <text x="40" y="44" font-family="monospace" font-size="8" fill="#2d6a4f" text-anchor="middle" font-weight="bold">#</text>
+    <text x="64" y="44" font-family="monospace" font-size="8" fill="#1a4a3a" text-anchor="middle" font-weight="bold">#</text>
+    <!-- Bitcoin symbol -->
+    <circle cx="40" cy="16" r="10" fill="#52b788"/>
+    <text x="40" y="21" font-family="serif" font-size="13" fill="white" text-anchor="middle" font-weight="bold">₿</text>
+    <!-- Arrow down -->
+    <line x1="40" y1="26" x2="40" y2="30" stroke="#52b788" stroke-width="2" stroke-dasharray="2 2"/>
+    <!-- Timestamp label -->
+    <rect x="14" y="56" width="52" height="14" rx="3" fill="#1a3028"/>
+    <text x="40" y="66" font-family="monospace" font-size="7" fill="#52b788" text-anchor="middle" letter-spacing="0.5">TIMESTAMP</text>
+  </svg>`,
+  // Step 4: Verification / search
+  `<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Document -->
+    <rect x="14" y="8" width="40" height="52" rx="3" fill="#f0f7f4" stroke="#6a8878" stroke-width="1.5"/>
+    <line x1="20" y1="22" x2="48" y2="22" stroke="#c8b89a" stroke-width="1.5"/>
+    <line x1="20" y1="30" x2="48" y2="30" stroke="#c8b89a" stroke-width="1.5"/>
+    <line x1="20" y1="38" x2="40" y2="38" stroke="#c8b89a" stroke-width="1.5"/>
+    <!-- Tiny art on document -->
+    <rect x="20" y="12" width="12" height="8" rx="1" fill="#2d6a4f" opacity="0.5"/>
+    <circle cx="38" cy="16" r="5" fill="#1a4a3a" opacity="0.5"/>
+    <!-- Magnifying glass -->
+    <circle cx="54" cy="50" r="16" fill="white" stroke="#1a3028" stroke-width="2.5"/>
+    <circle cx="54" cy="50" r="11" fill="#f0f7f4" stroke="#6a8878" stroke-width="1"/>
+    <!-- Checkmark inside glass -->
+    <polyline points="48,50 53,55 62,44" fill="none" stroke="#2d6a4f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Handle -->
+    <line x1="66" y1="62" x2="74" y2="70" stroke="#1a3028" stroke-width="3" stroke-linecap="round"/>
+  </svg>`,
+  // Step 5: Complete / ready
+  `<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Certificate/medal shape -->
+    <rect x="10" y="8" width="60" height="46" rx="4" fill="#f0f7f4" stroke="#52b788" stroke-width="2"/>
+    <!-- Decorative border inside -->
+    <rect x="14" y="12" width="52" height="38" rx="2" fill="none" stroke="#52b788" stroke-width="0.8" stroke-dasharray="3 2" opacity="0.5"/>
+    <!-- Abstract art stamp in center -->
+    <rect x="22" y="18" width="14" height="10" rx="1" fill="#2d6a4f" opacity="0.7"/>
+    <circle cx="48" cy="23" r="7" fill="#1a4a3a" opacity="0.65"/>
+    <polygon points="22,42 32,30 42,40" fill="#2d6a4f" opacity="0.65"/>
+    <!-- Big checkmark stamp -->
+    <circle cx="54" cy="38" r="12" fill="#2d6a4f"/>
+    <polyline points="48,38 53,43 62,32" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Ribbon -->
+    <rect x="32" y="54" width="16" height="20" rx="1" fill="#52b788"/>
+    <rect x="34" y="54" width="12" height="18" rx="1" fill="#2d6a4f" opacity="0.7"/>
+    <polygon points="32,74 40,68 48,74 48,54 32,54" fill="#52b788"/>
+    <!-- Star on ribbon -->
+    <text x="40" y="67" font-size="10" text-anchor="middle" fill="#f0f7f4">★</text>
+  </svg>`
+];
+
+const TUTORIAL_STEPS = [
+  {
+    icon: '🎨',
+    title: 'ArtStampsへようこそ',
+    body: '作品の存在をビットコインブロックチェーンで証明するアプリです。\n初めての方のために使い方を説明します。'
+  },
+  {
+    icon: '📸',
+    title: '作品を撮影・登録',
+    body: '「登録」タブで作品写真を選ぶと\nSHA-256ハッシュが自動生成されます。\nタイトルや素材などのメモも記録できます。'
+  },
+  {
+    icon: '⛓',
+    title: 'ブロックチェーンに刻む',
+    body: '「タイムスタンプを取得する」をタップすると\nOpenTimestampsサーバーに送信されます。\n数時間〜数日でビットコインに組み込まれます。'
+  },
+  {
+    icon: '🔍',
+    title: '第三者も検証できる',
+    body: '「検索」タブでハッシュから作品を逆引きできます。\nopentimestamps.orgでOTSファイルを検証すれば\n誰でも制作時期証明を確認できます。'
+  },
+  {
+    icon: '✅',
+    title: '準備完了！',
+    body: '「使い方」タブでいつでも詳しい説明を確認できます。\nOTSファイルは大切に保管してください。\nさあ、最初の作品を登録しましょう。'
+  }
+];
+
+let tutorialStep = 0;
+
+function startTutorial() {
+  tutorialStep = 0;
+  renderTutorialStep();
+  document.getElementById('tutorialOverlay').style.display = 'flex';
+}
+
+function renderTutorialStep() {
+  const step = TUTORIAL_STEPS[tutorialStep];
+  const iconEl = document.getElementById('tutorialIcon');
+  iconEl.innerHTML = TUTORIAL_SVG[tutorialStep] || step.icon;
+  iconEl.style.fontSize = TUTORIAL_SVG[tutorialStep] ? '0' : '';
+  document.getElementById('tutorialTitle').textContent = step.title;
+  document.getElementById('tutorialBody').textContent = step.body;
+
+  const dots = document.getElementById('tutorialDots');
+  dots.innerHTML = TUTORIAL_STEPS.map((_, i) =>
+    `<div class="tutorial-dot ${i === tutorialStep ? 'active' : ''}"></div>`
+  ).join('');
+
+  const btn = document.getElementById('tutorialNextBtn');
+  btn.textContent = tutorialStep === TUTORIAL_STEPS.length - 1 ? t('tutorial_start') : t('tutorial_next');
+}
+
+function nextTutorial() {
+  if (tutorialStep < TUTORIAL_STEPS.length - 1) {
+    tutorialStep++;
+    renderTutorialStep();
+  } else {
+    closeTutorial();
+  }
+}
+
+function closeTutorial() {
+  document.getElementById('tutorialOverlay').style.display = 'none';
+  localStorage.setItem('artstamp_tutorial_done', '1');
+}
+
+// Show tutorial on first visit
+if (!localStorage.getItem('artstamp_tutorial_done')) {
+  setTimeout(startTutorial, 600);
+}
+
+// PWA: Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+
+// PWA: Install prompt
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  setTimeout(() => { if (deferredPrompt) showInstallBanner(); }, 3000);
+});
+
+function showInstallBanner() {
+  if (document.getElementById('installBanner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'installBanner';
+  banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#0f0e0c;color:#f5f0e8;padding:16px 20px;padding-bottom:max(16px,env(safe-area-inset-bottom));z-index:9998;display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:DM Mono,monospace;font-size:12px;border-top:1px solid #2a2820;';
+  banner.innerHTML = `<div><div style="font-family:Shippori Mincho,serif;font-size:14px;margin-bottom:3px;">${t('pwa_title')}</div><div style="color:#8a8070;font-size:10px;">${t('pwa_sub')}</div></div><div style="display:flex;gap:8px;flex-shrink:0;"><button onclick="dismissInstall()" style="padding:8px 14px;background:transparent;border:1px solid #3a3830;border-radius:8px;color:#8a8070;font-family:DM Mono,monospace;font-size:11px;cursor:pointer;">${t('pwa_later')}</button><button onclick="doInstall()" style="padding:8px 16px;background:#2d6a4f;border:none;border-radius:8px;color:white;font-family:DM Mono,monospace;font-size:11px;cursor:pointer;">${t('pwa_install')}</button></div>`;
+  document.body.appendChild(banner);
+}
+
+function doInstall() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => { deferredPrompt = null; dismissInstall(); });
+}
+
+function dismissInstall() {
+  const b = document.getElementById('installBanner');
+  if (b) b.remove();
+}
+
+// ===== RETRY OTS =====
+async function retryOTS(id) {
+  const a = artworks.find(x => x.id === id);
+  if (!a) return;
+
+
+  const btn = document.getElementById('retryBtn_' + id);
+  if (btn) { btn.disabled = true; btn.textContent = t('toast_retry_sending'); }
+  showToast(t('toast_retry_sending'));
+
+  const result = await submitHashToOTS(a.hash);
+  if (result) {
+    a.otsData = result.otsBase64;
+    saveArtworks();
+    showToast(t('toast_retry_ok'));
+    showDetail(id);
+  } else {
+    showToast(t('toast_retry_fail'));
+    if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path d="M12 7A5 5 0 112 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><polyline points="12,4 12,7 9,7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> ' + t('btn_retry_ots'); }
+  }
+}
+
+// ===== PDF CERTIFICATE GENERATION =====
+function generateCertificate(id) {
+  const a = artworks.find(x => x.id === id);
+  if (!a) return;
+
+  const isJa = currentLang === 'ja';
+  const statusText = a.status === 'confirmed' ? t('status_confirmed') : t('status_pending');
+  const now = new Date().toLocaleDateString(isJa ? 'ja-JP' : 'en-US', {year:'numeric',month:'long',day:'numeric'});
+
+  // Build HTML for the certificate, then use print window
+  const certHTML = `<!DOCTYPE html>
+<html lang="${currentLang}">
+<head>
+<meta charset="UTF-8">
+<title>${t('cert_title')} — ${escHtml(a.title)}</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Mono', monospace;
+    background: #f0f7f4;
+    color: #0f0e0c;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 0;
+  }
+  .cert {
+    width: 210mm;
+    min-height: 297mm;
+    background: #f0f7f4;
+    padding: 16mm 16mm 12mm;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  /* Corner decorations */
+  .corner {
+    position: absolute;
+    width: 20mm;
+    height: 20mm;
+  }
+  .corner-tl { top: 8mm; left: 8mm; border-top: 2px solid #2d6a4f; border-left: 2px solid #2d6a4f; }
+  .corner-tr { top: 8mm; right: 8mm; border-top: 2px solid #2d6a4f; border-right: 2px solid #2d6a4f; }
+  .corner-bl { bottom: 8mm; left: 8mm; border-bottom: 2px solid #2d6a4f; border-left: 2px solid #2d6a4f; }
+  .corner-br { bottom: 8mm; right: 8mm; border-bottom: 2px solid #2d6a4f; border-right: 2px solid #2d6a4f; }
+
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 8mm;
+    padding-bottom: 6mm;
+    border-bottom: 1px solid #b8d8ce;
+  }
+  .logo-area { display: flex; align-items: center; gap: 8px; }
+  .logo-text { font-family: 'Shippori Mincho', serif; font-size: 22px; font-weight: 800; color: #0f0e0c; }
+  .logo-text span { color: #2d6a4f; }
+  .logo-sub { font-size: 8px; color: #7a9088; letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+  .cert-label {
+    text-align: right;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #7a9088;
+  }
+  .cert-label-big {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #0f0e0c;
+    margin-bottom: 3px;
+  }
+
+  .artwork-section {
+    display: flex;
+    gap: 8mm;
+    margin-bottom: 8mm;
+    align-items: flex-start;
+  }
+  .artwork-img {
+    width: 60mm;
+    height: 60mm;
+    object-fit: cover;
+    border-radius: 4mm;
+    border: 1px solid #b8d8ce;
+    flex-shrink: 0;
+    background: #d8ede6;
+  }
+  .artwork-img-placeholder {
+    width: 60mm;
+    height: 60mm;
+    border-radius: 4mm;
+    border: 1px solid #b8d8ce;
+    flex-shrink: 0;
+    background: #d8ede6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+  }
+  .artwork-meta { flex: 1; }
+  .artwork-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    color: #0f0e0c;
+  }
+  .artwork-sub {
+    font-size: 10px;
+    color: #7a9088;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+  .status-confirmed { background: #e8f5ee; color: #2d6a4f; border: 1px solid #90d4a8; }
+  .status-pending { background: #fff8e6; color: #b5830a; border: 1px solid #f0d080; }
+  .meta-row { display: flex; gap: 6mm; flex-wrap: wrap; }
+  .meta-item { margin-bottom: 6px; }
+  .meta-key { font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase; color: #7a9088; margin-bottom: 2px; }
+  .meta-val { font-size: 11px; color: #0f0e0c; }
+
+  .proof-section {
+    background: #0f0e0c;
+    border-radius: 4mm;
+    padding: 6mm 7mm;
+    margin-bottom: 6mm;
+  }
+  .proof-title { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: #7a9088; margin-bottom: 4mm; }
+  .proof-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 4mm; margin-bottom: 3mm; }
+  .proof-row:last-child { margin-bottom: 0; }
+  .proof-key { font-size: 9px; color: #7a9088; flex-shrink: 0; letter-spacing: 0.3px; }
+  .proof-val { font-size: 9px; color: #a8d8a8; text-align: right; word-break: break-all; line-height: 1.6; }
+  .hash-val { font-size: 8px; color: #52b788; line-height: 1.7; word-break: break-all; text-align: right; }
+
+  .chain-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4mm;
+    margin-bottom: 6mm;
+    flex-wrap: wrap;
+  }
+  .chain-node {
+    background: #f7fbf9;
+    border: 1px solid #b8d8ce;
+    border-radius: 3mm;
+    padding: 3mm 5mm;
+    font-size: 8px;
+    text-align: center;
+    letter-spacing: 0.5px;
+    color: #0f0e0c;
+  }
+  .chain-node small { display: block; font-size: 7px; color: #7a9088; margin-top: 1px; }
+  .chain-arrow { color: #2d6a4f; font-size: 14px; }
+
+  .footer {
+    margin-top: auto;
+    padding-top: 5mm;
+    border-top: 1px solid #b8d8ce;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .footer-left { font-size: 8px; color: #7a9088; line-height: 1.7; max-width: 110mm; }
+  .footer-right { text-align: right; }
+  .issued-label { font-size: 8px; color: #7a9088; letter-spacing: 1px; text-transform: uppercase; }
+  .issued-date { font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 600; color: #0f0e0c; }
+  .seal {
+    width: 18mm; height: 18mm;
+    border-radius: 50%;
+    background: #2d6a4f;
+    display: flex; align-items: center; justify-content: center;
+    margin: 3mm auto 0;
+  }
+  .seal svg { width: 12mm; height: 12mm; }
+</style>
+</head>
+<body>
+<div class="cert">
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <div class="header">
+    <div class="logo-area">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="16" fill="none" stroke="#2d6a4f" stroke-width="2"/>
+        <line x1="18" y1="4" x2="18" y2="7" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="32" y1="18" x2="29" y2="18" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="32" x2="18" y2="29" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="4" y1="18" x2="7" y2="18" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M22 11 C22 8 13 8 13 13 C13 18 23 18 23 23 C23 28 14 28 14 25" stroke="#2d6a4f" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+        <circle cx="18" cy="18" r="1.5" fill="#52b788"/>
+      </svg>
+      <div>
+        <div class="logo-text">Art<span>Stamps</span></div>
+        <div class="logo-sub">${t('subtitle')}</div>
+      </div>
+    </div>
+    <div class="cert-label">
+      <div class="cert-label-big">${t('cert_title')}</div>
+      <div>${t('cert_issued')}: ${now}</div>
+    </div>
+  </div>
+
+  <div class="artwork-section">
+    ${a.imgSrc
+      ? `<img class="artwork-img" src="${a.imgSrc}" alt="${escHtml(a.title)}">`
+      : `<div class="artwork-img-placeholder"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;"><rect x="3" y="3" width="26" height="26" rx="3" fill="#d8ede6" stroke="#6a8878" stroke-width="1.5"/><rect x="3" y="3" width="26" height="26" rx="3" fill="none" stroke="#6a8878" stroke-width="1.5"/><line x1="3" y1="22" x2="29" y2="22" stroke="#b8d8ce" stroke-width="0.8"/><path d="M3 22L11 14l8 8 5-5 6 5" fill="#d8ede6" stroke="#6a8878" stroke-width="1"/><circle cx="23" cy="10" r="3" fill="#6a8878" opacity="0.4"/></svg></div>`}
+    <div class="artwork-meta">
+      <div class="artwork-title">${escHtml(a.title)}</div>
+      <div class="artwork-sub">${t('cert_registered_artwork')}</div>
+      <div class="status-pill ${a.status === 'confirmed' ? 'status-confirmed' : 'status-pending'}">
+        <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor;margin-right:5px;vertical-align:middle;"></span>${statusText}
+      </div>
+      <div class="meta-row">
+        ${a.year ? `<div class="meta-item"><div class="meta-key">${t('cert_year')}</div><div class="meta-val">${escHtml(a.year)}</div></div>` : ''}
+        ${a.size ? `<div class="meta-item"><div class="meta-key">${t('cert_size')}</div><div class="meta-val">${escHtml(a.size)}</div></div>` : ''}
+        ${a.material ? `<div class="meta-item"><div class="meta-key">${t('cert_material')}</div><div class="meta-val">${escHtml(a.material)}</div></div>` : ''}
+      </div>
+    </div>
+  </div>
+
+  <div class="chain-row">
+    <div class="chain-node">${t('chain_photo')}<small>original file</small></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node">SHA-256<small>hash</small></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node">OpenTimestamps<small>server</small></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node">Bitcoin<small>blockchain</small></div>
+  </div>
+
+  <div class="proof-section">
+    <div class="proof-title">${t('info_proof_title')}</div>
+    <div class="proof-row">
+      <span class="proof-key">${t('cert_registered')}</span>
+      <span class="proof-val">${formatDateFull(a.registeredAt)}</span>
+    </div>
+    <div class="proof-row">
+      <span class="proof-key">${t('cert_status')}</span>
+      <span class="proof-val">${statusText}</span>
+    </div>
+    <div class="proof-row" style="flex-direction:column;gap:3px;">
+      <span class="proof-key">${t('cert_hash')}</span>
+      <span class="hash-val">${a.hash}</span>
+    </div>
+    ${a.otsData ? `<div class="proof-row"><span class="proof-key">OTS</span><span class="proof-val">${t('cert_ots_obtained')}</span></div>` : ''}
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">
+      ${t('cert_footer')}<br>
+      ${t('cert_verify')}
+    </div>
+    <div class="footer-right">
+      <div class="seal">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="8,16 13,21 24,10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="issued-label" style="margin-top:2mm;">${t('cert_issued')}</div>
+      <div class="issued-date">${now}</div>
+    </div>
+  </div>
+</div>
+<script>
+  // Wait for fonts then print
+  document.fonts.ready.then(() => { setTimeout(() => { window.print(); }, 400); });
+<\/script>
+</body>
+</html>`;
+
+  // ポップアップ不要：BlobURLで直接ダウンロード or 新タブ表示
+  const blob = new Blob([certHTML], { type: 'text/html;charset=utf-8' });
+  const blobUrl = URL.createObjectURL(blob);
+
+  // まず新タブを試みる（印刷UIが出る）
+  const w = window.open(blobUrl, '_blank');
+  if (!w) {
+    // ポップアップブロック時はHTMLファイルとしてダウンロード
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = `ArtStamps_cert_${escHtml(artwork.title).replace(/\s+/g,'_')}_${artwork.hash.slice(0,8)}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast(t('toast_cert_downloaded'));
+  }
+  // メモリ解放（少し待ってから）
+  setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+}
+</script>
+
+<!-- サイトフッター：AdSense必須のプライバシーポリシーリンク等 -->
+<footer style="text-align:center;padding:24px 16px 40px;font-family:'DM Mono',monospace;font-size:10px;color:#6a7a72;border-top:1px solid #d8ede6;margin-top:16px;">
+  <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;">
+    <a href="./privacy.html" style="color:#6a7a72;text-decoration:none;letter-spacing:0.5px;">PRIVACY POLICY</a>
+    <span style="color:#c0d0c8;">|</span>
+    <a href="https://opentimestamps.org" target="_blank" rel="noopener" style="color:#6a7a72;text-decoration:none;letter-spacing:0.5px;">OPENTIMESTAMPS</a>
+    <span style="color:#c0d0c8;">|</span>
+    <span style="letter-spacing:0.5px;">© ARTSTAMPS</span>
+  </div>
+  <div style="margin-top:8px;color:#9aaa98;font-size:9px;">Powered by <a href="https://www.keitoharada.com/" target="_blank" rel="noopener" style="color:#9aaa98;text-decoration:underline;">Keito Harada</a></div>
+</footer>
+
+</body>
+</html>

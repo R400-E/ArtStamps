@@ -1,0 +1,3 @@
+google.com, pub-4492038278621252, DIRECT, f08c47fec0942fa0
+# Monetag (要設定: monetag.comでアカウント取得後、下記を実際のIDに変更)
+# monetag.com, PUBLISHER_ID, DIRECT
