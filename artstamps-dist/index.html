@@ -59,8 +59,8 @@
 
 <!-- Monetag サイト認証 -->
 <meta name="monetag" content="f808712f8c2bea53d150e40129c40bc4">
-<!-- Google AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4492038278621252" crossorigin="anonymous"></script>
+<!-- Google AdSense (審査通過後に有効化) -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4492038278621252" crossorigin="anonymous"></script> -->
 <!-- Monetag (CPM型 — 表示課金・インタースティシャル/プッシュ通知) -->
 <!-- ★ 要設定: monetag.com でサイト登録後、下記IDを実際のPublisher IDに変更してください -->
 <!-- <script src="//whephiwums.com/PUBLISHER_ID/invoke.js" async></script> -->
@@ -1264,16 +1264,7 @@
 
     <button class="btn btn-primary" id="submitBtn" onclick="submitArtwork()" disabled data-i18n="btn_submit">
       タイムスタンプを取得する
-    </button>
-
-    <!-- admax 登録画面 -->
-    <div class="ad-unit" style="margin-top:20px;">
-      <span class="ad-label">スポンサー</span>
-      <!-- admax -->
-    <script src="https://adm.shinobi.jp/s/9728b4be9fb26812752bf28927420563"></script>
-    <!-- admax -->
-    </div>
-    <div class="ots-note" data-i18n="ots_note">
+    </button><div class="ots-note" data-i18n="ots_note">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:4px;"><circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><line x1="7" y1="8" x2="7" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4" y1="13" x2="10" y2="13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> SHA-256ハッシュを生成後、OpenTimestamps APIへ送信します。
       ビットコインブロックチェーンへの組み込みには通常数時間〜数日かかります。
       OTSファイルは作品一覧からダウンロード可能です。
@@ -1297,23 +1288,7 @@
       <option value="title_asc" data-i18n="sort_title_asc">タイトル順</option>
     </select>
   </div>
-  <div id="artworkList"></div>
-
-  <!-- 広告：一覧下部 -->
-  <div class="ad-unit">
-    <span class="ad-label">スポンサー</span>
-    <!-- admax -->
-    <script src="https://adm.shinobi.jp/s/9728b4be9fb26812752bf28927420563"></script>
-    <!-- admax -->
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-4492038278621252"
-         data-ad-slot="auto"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-</div>
+  <div id="artworkList"></div></div>
 
 <!-- SEARCH SCREEN -->
 <div id="screen-search" class="screen search-screen">
@@ -1977,18 +1952,7 @@ function renderList() {
         </svg>
         <div class="empty-text">${t('empty_text')}</div>
         <div class="empty-sub">${t('empty_sub')}</div>
-        <div class="ad-unit" style="margin-top:16px;">
-          <span class="ad-label">スポンサー</span>
-          <div id="admaxEmpty"></div>
-        </div>
       </div>`;
-    // 空状態のAdMax動的挿入
-    const emptyAd = document.getElementById('admaxEmpty');
-    if (emptyAd) {
-      const s = document.createElement('script');
-      s.src = 'https://adm.shinobi.jp/s/9728b4be9fb26812752bf28927420563';
-      emptyAd.appendChild(s);
-    }
     return;
   }
 
@@ -2073,28 +2037,8 @@ function showDetail(id) {
 
     <button class="btn" style="background:var(--warm);color:var(--muted);margin-top:12px;" onclick="confirmDelete('${a.id}')">
       ${t('delete_btn')}
-    </button>
-
-    <div class="ad-unit" id="detailAdUnit">
-      <span class="ad-label">${t('ad_label')}</span>
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-4492038278621252"
-           data-ad-slot="auto"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-    </div>
-  `;
-  // AdSense init for dynamically inserted ad
-  try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-  // 忍者AdMax: template literal内ではscriptタグが動かないため動的に挿入
-  const admaxContainer = document.getElementById('detailAdUnit');
-  if (admaxContainer && !admaxContainer.querySelector('.admax-loaded')) {
-    const s = document.createElement('script');
-    s.src = 'https://adm.shinobi.jp/s/9728b4be9fb26812752bf28927420563';
-    s.className = 'admax-loaded';
-    admaxContainer.appendChild(s);
-  }
+    </button>`;
+  try { } catch(e) {}
 }
 
 function confirmDelete(id) {
@@ -2240,12 +2184,12 @@ applyLang();
 renderList();
 
 // ===== OTS (Netlifyプロキシ経由でCORS回避) =====
-// ブラウザ → /.netlify/functions/ots-stamp → OTSカレンダー
+// ブラウザ → /api/ots-stamp → OTSカレンダー
 
 async function submitHashToOTS(hashHex) {
   try {
     const hashBytes = hexToBytes(hashHex);
-    const res = await fetch('/.netlify/functions/ots-stamp', {
+    const res = await fetch('/api/ots-stamp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/octet-stream' },
       body: hashBytes.buffer,
@@ -2262,7 +2206,7 @@ async function submitHashToOTS(hashHex) {
 async function upgradeOTS(otsBase64) {
   try {
     const otsBytes = base64ToUint8(otsBase64);
-    const res = await fetch('/.netlify/functions/ots-upgrade', {
+    const res = await fetch('/api/ots-upgrade', {
       method: 'POST',
       headers: { 'Content-Type': 'application/octet-stream' },
       body: otsBytes.buffer,
