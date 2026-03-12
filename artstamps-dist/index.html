@@ -1447,7 +1447,7 @@ const I18N = {
     subtitle: '制作時期証明システム',
     nav_register: '登録', nav_list: '一覧', nav_search: '検索', nav_help: '使い方',
     upload_title: '作品写真を選択',
-    upload_sub: 'タップして写真を選ぶ・またはドロップ',
+    upload_sub: 'タップして写真を選ぶ・またはドロップ<br><small style="color:var(--accent);font-size:10px;">※「写真ライブラリ」から選択してください（「写真を撮る」は不可）</small>',
     label_title: '作品タイトル *', ph_title: '例: 無題 #12',
     label_year: '制作年', label_size: 'サイズ',
     label_material: '素材・技法', ph_material: '例: 油彩、キャンバス',
@@ -1537,7 +1537,7 @@ const I18N = {
     verify5: '写真ファイルが1バイトでも変更されるとハッシュが変わり、検証に失敗します。オリジナルファイルを改ざんしないよう保管してください。',
     help_faq_title: 'よくある質問',
     faq1_q: '写真を編集・トリミングしたらどうなる？', faq1_a: 'ファイルが変わるとSHA-256ハッシュも変わるため、証明が無効になります。登録後のオリジナルファイルは絶対に変更しないでください。編集版が必要な場合は別途登録することをおすすめします。',
-    faq2_q: 'iPhoneで撮った写真をそのまま使っていい？', faq2_a: '注意が必要です。iPhoneはデフォルトでHEIC形式で保存しますが、送信時に自動でJPEGに変換することがあります。変換されるとハッシュが変わり証明が無効になります。登録に使ったファイルと全く同じファイルを原本として保管してください。設定 → カメラ → フォーマットを「互換性優先」にするとJPEGで統一できます。',
+    faq2_q: 'iPhoneで写真を選ぶとき「写真を撮る」を選んでいい？', faq2_a: '選ばないでください。「写真を撮る」でその場撮影した場合、ハッシュは正しく生成されますが、元ファイルとの照合ができなくなります。必ず「写真ライブラリ」から登録したいファイルを選んでください。またiPhoneはHEIC形式で保存しますが送信時にJPEG変換される場合があります。変換されるとハッシュが変わるため、設定 → カメラ → フォーマット → 「互換性優先」でJPEG統一をおすすめします。',
     faq3_q: 'LINEやメールで送った画像で登録してもいい？', faq3_a: 'いいえ、使わないでください。LINEやメール、SNSで送受信した画像は自動的に圧縮・変換されます。圧縮された時点でハッシュが変わるため、後から検証できなくなります。必ずカメラロールのオリジナルファイルを直接使用してください。',
     faq4_q: '「待機中」のままずっと変わらない', faq4_a: 'ビットコインブロックへの組み込みには通常数時間〜最大2日かかります。OTSファイルが発行されていれば証明は開始されています。ArtStampsはアプリを開くたびに待機中の作品を自動でチェックし、ブロックチェーンへの組み込みが確認できた時点で「確認済み」に自動更新されます。確認にはインターネット接続が必要です。',
     faq5_q: 'このアプリのデータはどこに保存される？', faq5_a: 'すべてのデータはお使いのデバイスのローカルストレージに保存されます。サーバーには一切送信されません。ブラウザのデータを消去すると作品データも消えるため、OTSファイルは別途バックアップしてください。',
@@ -1640,7 +1640,7 @@ const I18N = {
     verify5: 'Even a single-byte change to the photo will invalidate the hash and fail verification. Never modify the original file.',
     help_faq_title: 'Frequently Asked Questions',
     faq1_q: 'What if I edit or crop the photo?', faq1_a: 'Any change to the file will change the SHA-256 hash, making the proof invalid. Never modify the original registered file. If you need an edited version, register it separately.',
-    faq2_q: 'Can I use a photo taken directly on iPhone?', faq2_a: 'Use caution. iPhones save photos in HEIC format by default, but may auto-convert to JPEG when sharing. This changes the hash and invalidates the proof. Always keep the exact file you registered. Go to Settings → Camera → Formats → "Most Compatible" to shoot in JPEG.',
+    faq2_q: 'Should I use "Take Photo" when selecting a photo on iPhone?', faq2_a: 'No — always choose "Photo Library" instead. Taking a new photo in-app means you may not have the original file later, making verification impossible. Also, iPhones save in HEIC by default but may auto-convert to JPEG when sharing, which changes the hash. To avoid this, go to Settings → Camera → Formats → "Most Compatible" to always shoot in JPEG.',
     faq3_q: 'Can I use an image sent via LINE or email?', faq3_a: 'No. Images sent through LINE, email, or social media are automatically compressed or converted. This changes the hash, making later verification impossible. Always use the original file directly from your camera roll.',
     faq4_q: 'It\'s been "Pending" for a long time', faq4_a: 'Embedding into a Bitcoin block typically takes a few hours to up to 2 days. As long as the OTS file was issued, your proof has started. ArtStamps automatically checks pending artworks each time you open the app, and updates to "Confirmed" once blockchain inclusion is detected. An internet connection is required.',
     faq5_q: 'Where is my data stored?', faq5_a: 'All data is stored locally on your device. Nothing is sent to any server. Clearing your browser data will also delete your artwork records, so be sure to back up your OTS files separately.',
@@ -1658,7 +1658,7 @@ function t(key) {
 
 function applyLang() {
   // Keys that use innerHTML (may contain HTML tags like <br>)
-  const innerHTMLKeys = new Set(['help_hero_title', 'help_hero_body']);
+  const innerHTMLKeys = new Set(['help_hero_title', 'help_hero_body', 'upload_sub']);
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     const val = t(key);
